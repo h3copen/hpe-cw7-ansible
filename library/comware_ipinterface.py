@@ -103,14 +103,14 @@ EXAMPLES = """
 import socket
 
 try:
-    HAS_PYHP = True
-    from pyhpecw7.comware import HPCOM7
-    from pyhpecw7.features.ipinterface import IpInterface
-    from pyhpecw7.utils.validate import valid_ip_network
-    from pyhpecw7.utils.network import ipaddr
-    from pyhpecw7.errors import *
+    HAS_PYCW7 = True
+    from pycw7.comware import COM7
+    from pycw7.features.ipinterface import IpInterface
+    from pycw7.utils.validate import valid_ip_network
+    from pycw7.utils.network import ipaddr
+    from pycw7.errors import *
 except ImportError as ie:
-    HAS_PYHP = False
+    HAS_PYCW7 = False
 
 
 def compare_ips(net1, net2):
@@ -167,9 +167,9 @@ def main():
         supports_check_mode=True
     )
 
-    if not HAS_PYHP:
+    if not HAS_PYCW7:
         module.fail_json(
-            msg='There was a problem loading from the pyhpecw7 module')
+            msg='There was a problem loading from the pycw7 module')
 
     filtered_keys = ('state', 'hostname', 'username', 'password',
                      'port', 'CHECKMODE', 'name', 'version', 'look_for_keys')
@@ -179,7 +179,7 @@ def main():
     password = module.params['password']
     port = module.params['port']
 
-    device = HPCOM7(host=hostname, username=username,
+    device = COM7(host=hostname, username=username,
                     password=password, port=port)
 
     name = module.params['name']
@@ -203,7 +203,7 @@ def main():
 
     try:
         ip_int = IpInterface(device, name, version)
-    except PYHPError as e:
+    except PYCW7Error as e:
         safe_fail(module, device,
                   descr='There was an error initializing'
                   + ' the IpInterface class.',
@@ -220,7 +220,7 @@ def main():
 
     try:
         existing = get_existing(ip_int, addr, mask)
-    except PYHPError as e:
+    except PYCW7Error as e:
         safe_fail(module,
                   device,
                   descr='Error getting the existing configuration.',
@@ -254,7 +254,7 @@ def main():
             try:
                 device.execute_staged()
                 end_state = get_existing(ip_int, addr, mask)
-            except PYHPError as e:
+            except PYCW7Error as e:
                 safe_fail(module,
                           device,
                           descr='Error during command execution.',

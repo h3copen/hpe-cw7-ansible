@@ -100,7 +100,7 @@ Examples
     
         
           - name: copy version from ansible server into switch.
-            comware_file_copy: file=/root/ansible-hpe-cw7-master/gqy/s6820-cmw710-system-weak-patch-f6205p05h16.bin remote_path=flash:/s6820-cmw710-system-weak-patch-f6205p05h16.bin username={{ username }} password={{ password }} hostname={{ inventory_hostname }}
+            comware_file_copy: file=/root/pycw7-master/gqy/s6820-cmw710-system-weak-patch-f6205p05h16.bin remote_path=flash:/s6820-cmw710-system-weak-patch-f6205p05h16.bin username={{ username }} password={{ password }} hostname={{ inventory_hostname }}
     
           - name: check bin is exit or not and active it.
             comware_patch: patchname=patch.bin activate=true username={{ username }} password={{ password }} hostname={{ inventory_hostname }}

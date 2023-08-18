@@ -163,14 +163,14 @@ import socket
 import re
 
 try:
-    HAS_PYHP = True
-    from pyhpecw7.comware import HPCOM7
-    from pyhpecw7.features.bgp_group import Bgp
-    from pyhpecw7.features.interface import Interface
-    from pyhpecw7.features.errors import InterfaceError
-    from pyhpecw7.errors import *
+    HAS_PYCW7 = True
+    from pycw7.comware import COM7
+    from pycw7.features.bgp_group import Bgp
+    from pycw7.features.interface import Interface
+    from pycw7.features.errors import InterfaceError
+    from pycw7.errors import *
 except ImportError as ie:
-    HAS_PYHP = False
+    HAS_PYCW7 = False
 
 
 def safe_fail(module, device=None, **kwargs):
@@ -212,8 +212,8 @@ def main():
         supports_check_mode=True
     )
 
-    if not HAS_PYHP:
-        safe_fail(module, msg='There was a problem loading from the pyhpecw7 '
+    if not HAS_PYCW7:
+        safe_fail(module, msg='There was a problem loading from the pycw7 '
                   + 'module.', error=str(ie))
 
     filtered_keys = ('state', 'hostname', 'username', 'password',
@@ -223,7 +223,7 @@ def main():
     username = module.params['username']
     password = module.params['password']
     port = module.params['port']
-    device = HPCOM7(host=hostname, username=username,
+    device = COM7(host=hostname, username=username,
                     password=password, port=port)
     state = module.params['state']
     changed = False
@@ -246,7 +246,7 @@ def main():
     if peer_connect_intf:
         try:
             interface = Interface(device, peer_connect_intf)
-        except PYHPError:
+        except PYCW7Error:
             safe_fail(module, msg='There was problem recognizing that interface.')
 
         if not interface.iface_exists:
@@ -254,12 +254,12 @@ def main():
 
     try:
         bgp_config = Bgp(device,bgp_as,instance)
-    except PYHPError:
+    except PYCW7Error:
         safe_fail(module,msg='there is problem in creating bgp instance')
 
     try:
         existing = bgp_config.get_config()
-    except PYHPError:
+    except PYCW7Error:
         safe_fail(module, msg='Error getting existing config.')
 
     if peer_in_group:
@@ -295,7 +295,7 @@ def main():
             try:
                 device.execute_staged()
                 end_state = bgp_config.get_config()
-            except PYHPError as e:
+            except PYCW7Error as e:
                 safe_fail(module, device, msg=str(e),
                           descr='Error on device execution.')
             changed = True

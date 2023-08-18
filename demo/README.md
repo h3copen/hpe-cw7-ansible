@@ -69,9 +69,9 @@ find / -name ansible
 
 ## Library installation
 ### 1. Download the library  
-Download the [hpe-cw7-ansible](https://github.com/HPENetworking/hpe-cw7-ansible) library.
+Download the [pycw7-ansible](https://github.com/H3C/pycw7-ansible) library.
 ```
-wget https://github.com/HPENetworking/hpe-cw7-ansible/archive/refs/heads/main.zip
+wget https://github.com/H3C/pycw7-ansible/archive/refs/heads/main.zip
 ```
 
 ### 2. Install dependencies  
@@ -98,7 +98,7 @@ unzip main.zip
 
 ### 4. Replace files of ncclient
 ```
-cd hpe-cw7-ansible-main/
+cd test-cw7-ansible-main/
 cp ./for-ncclient/rpc.py /usr/local/python3/lib/python3.7/site-packages/ncclient/operations/rpc.py
 cp ./for-ncclient/manager.py /usr/local/python3/lib/python3.7/site-packages/ncclient/manager.py
 ```
@@ -106,15 +106,15 @@ cp ./for-ncclient/manager.py /usr/local/python3/lib/python3.7/site-packages/nccl
 
 ### 5. Install the library
 ```
-cd hpe-cw7-ansible-main/
+cd test-cw7-ansible-main/
 chmod 777 setup.py
 python3 setup.py install
 ```
 
 ## Switch configuration
 ```
-local-user hpe
- password simple hpe
+local-user test
+ password simple test
  authorization-attribute user-role network-admin
  service-type ssh
 
@@ -124,27 +124,27 @@ netconf ssh server enable
  user-role network-admin
 
 ssh server enable
-ssh user hpe service-type all authentication-type password
+ssh user test service-type all authentication-type password
 scp server enable
 ```
 ## Add switch dns name into etc/host file
 ### etc/host file
 Add the dns mapping into etc/host file, i.e.
 ```
-172.17.8.10 hpe1
-172.17.8.12 hpe2
-172.17.8.11 hpe3
+172.17.8.10 test1
+172.17.8.12 test2
+172.17.8.11 test3
 ```
 
 ## Test reachability
 Use Ping to test the reachability, i.e.
 ```
-[admin@demo]# ping hpe1
-PING hpe1 (172.17.8.10) 56(84) bytes of data.
-64 bytes from hpe1 (172.17.8.10): icmp_seq=1 ttl=255 time=0.585 ms
-64 bytes from hpe1 (172.17.8.10): icmp_seq=2 ttl=255 time=0.455 ms
+[admin@demo]# ping test1
+PING test1 (172.17.8.10) 56(84) bytes of data.
+64 bytes from test1 (172.17.8.10): icmp_seq=1 ttl=255 time=0.585 ms
+64 bytes from test1 (172.17.8.10): icmp_seq=2 ttl=255 time=0.455 ms
 ^C
---- hpe1 ping statistics ---
+--- test1 ping statistics ---
 2 packets transmitted, 2 received, 0% packet loss, time 1001ms
 rtt min/avg/max/mdev = 0.455/0.520/0.585/0.065 ms
 ```
@@ -155,9 +155,9 @@ rtt min/avg/max/mdev = 0.455/0.520/0.585/0.065 ms
 Python 3.7.4 (default, Jan  6 2022, 14:21:40) 
 [GCC 4.8.5 20150623 (Red Hat 4.8.5-44)] on linux
 Type "help", "copyright", "credits" or "license" for more information.
->>> from pyhpecw7.comware import HPCOM7
->>> args = dict(host='hpe1', username='hpe', password='hpe', port=830)
->>> device = HPCOM7(**args)
+>>> from pytestcw7.comware import COM7
+>>> args = dict(host='test1', username='test', password='test', port=830)
+>>> device = COM7(**args)
 >>> device.open()
 <ncclient.manager.Manager object at 0x7f3ed5953150>
 ```
@@ -172,29 +172,29 @@ vim /etc/ansible/ansible.cfg
 2. Fill the config file with the library path.
 ```
 [defaults]
-library = /root/hpe-cw7-ansible-main/library
+library = /root/test-cw7-ansible-main/library
 ```
 
 ## Playbook execution
 ### 1. Prepare host file
 ```
 [all:vars]
-username=hpe
-password=hpe
+username=test
+password=test
 ansible_python_interpreter=/usr/bin/python3
 [switches]
-hpe1
-hpe2
-hpe3
+test1
+test2
+test3
 ```
 
 ### 2. Prepare playbook
-Take the hp-vlans.yml for example:
+Take the vlans.yml for example:
 ```
 ---
 
-  - name: VLAN Automation with Ansible on HP Com7 Devices
-    hosts: hpe1 hpe2
+  - name: VLAN Automation with Ansible on Com7 Devices
+    hosts: test1 test2
     gather_facts: no
     connection: local
 
@@ -214,7 +214,7 @@ Take the hp-vlans.yml for example:
 ### 3. Execute the playbooks
 Run the ansible-playbook command to test the scripts, i.e.
 ```
-ansible-playbook -i hosts hp-vlans.yml 
+ansible-playbook -i hosts vlans.yml 
 ```
 **Note:** 
 * Error - ansible-playbook: command not found  
@@ -226,26 +226,26 @@ find / -name ansible-playbook
 
 The result is similar to below.
 ```
-[admin@demo]#ansible-playbook -i hosts hp-vlans.yml 
+[admin@demo]#ansible-playbook -i hosts vlans.yml 
 
-PLAY [VLAN Automation with Ansible on HP Com7 Devices] *****************************************************************************
+PLAY [VLAN Automation with Ansible on Com7 Devices] *****************************************************************************
 
 TASK [ensure VLAN 10 exists] *******************************************************************************************************
 [WARNING]: Module did not set no_log for password
-changed: [hpe1]
-changed: [hpe2]
+changed: [test1]
+changed: [test2]
 
 TASK [ensure VLAN 20 exists] *******************************************************************************************************
-changed: [hpe1]
-changed: [hpe2]
+changed: [test1]
+changed: [test2]
 
 TASK [ensure VLAN 10 does not exist] ***********************************************************************************************
-changed: [hpe1]
-changed: [hpe2]
+changed: [test1]
+changed: [test2]
 
 PLAY RECAP *************************************************************************************************************************
-hpe1                       : ok=3    changed=3    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
-hpe2                       : ok=3    changed=3    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0 
+test1                       : ok=3    changed=3    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+test2                       : ok=3    changed=3    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0 
 ```
 
 ## Demo log

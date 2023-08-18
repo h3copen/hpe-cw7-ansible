@@ -101,8 +101,8 @@ Examples
         
     # install config file that will be the new running config
     - comware_install_config:
-        config_file='/root/ansible-hpe-cw7-master/gqy/123.cfg'
-        diff_file='/root/ansible-hpe-cw7-master/gqy/diffs.diff'
+        config_file='/root/pycw7-master/gqy/123.cfg'
+        diff_file='/root/pycw7-master/gqy/diffs.diff'
         commit_changes=true
         username={{ username }}
         password={{ password }}

@@ -1,3 +1,3 @@
-# hpe-cw7-ansible
+# pycw7-ansible
 ## library
-Ansible library of HPE CW7
+Ansible library of H3C CW7

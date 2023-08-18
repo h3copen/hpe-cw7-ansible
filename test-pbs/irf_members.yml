@@ -1,7 +1,7 @@
 ---
 
-  - name: HP Comware IRF Membership Testing
-    hosts: hp3
+  - name: Comware IRF Membership Testing
+    hosts: test3
     gather_facts: no
     connection: local
 

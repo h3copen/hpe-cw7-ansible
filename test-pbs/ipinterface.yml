@@ -1,7 +1,7 @@
 ---
 
-  - name: HP Comware IP address automation
-    hosts: hp2
+  - name: Comware IP address automation
+    hosts: test2
     gather_facts: no
     connection: local
 

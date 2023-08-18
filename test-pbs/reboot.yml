@@ -1,7 +1,7 @@
 ---
 
-  - name: HP Comware reboot testing
-    hosts: hp1
+  - name: Comware reboot testing
+    hosts: test1
     gather_facts: no
     connection: local
 

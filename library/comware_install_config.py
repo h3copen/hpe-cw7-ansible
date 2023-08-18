@@ -87,8 +87,8 @@ EXAMPLES = """
 
 # install config file that will be the new running config
 - comware_install_config:
-    config_file='/root/ansible-hpe-cw7-master/gqy/123.cfg'
-    diff_file='/root/ansible-hpe-cw7-master/gqy/diffs.diff'
+    config_file='/root/pycw7-ansible-master/gqy/123.cfg'
+    diff_file='/root/pycw7-ansible-master/gqy/diffs.diff'
     commit_changes=true
     username={{ username }}
     password={{ password }}
@@ -99,14 +99,14 @@ EXAMPLES = """
 import socket
 import os
 try:
-    HAS_PYHP = True
-    from pyhpecw7.features.config import Config
-    from pyhpecw7.features.file_copy import FileCopy
-    from pyhpecw7.comware import HPCOM7
-    from pyhpecw7.features.errors import *
-    from pyhpecw7.errors import *
+    HAS_PYCW7 = True
+    from pycw7.features.config import Config
+    from pycw7.features.file_copy import FileCopy
+    from pycw7.comware import COM7
+    from pycw7.features.errors import *
+    from pycw7.errors import *
 except ImportError as ie:
-    HAS_PYHP = False
+    HAS_PYCW7 = False
 
 
 def write_diffs(diff_file, diffs, full_diffs):
@@ -153,8 +153,8 @@ def main():
         supports_check_mode=True
     )
 
-    if not HAS_PYHP:
-        safe_fail(module, msg='There was a problem loading from the pyhpecw7 '
+    if not HAS_PYCW7:
+        safe_fail(module, msg='There was a problem loading from the pycw7 '
                   + 'module.', error=str(ie))
 
     username = module.params['username']
@@ -165,7 +165,7 @@ def main():
     device_args = dict(host=hostname, username=username,
                        password=password, port=port)
 
-    device = HPCOM7(timeout=60, **device_args)
+    device = COM7(timeout=60, **device_args)
 
     config_file = module.params['config_file']
     diff_file = module.params['diff_file']
@@ -194,7 +194,7 @@ def main():
                             dst='flash:/{0}'.format(basename))
             copy.transfer_file(look_for_keys=look_for_keys)
             cfg = Config(device, config_file)
-        except PYHPError as fe:
+        except PYCW7Error as fe:
             safe_fail(module, device, msg=str(fe),
                       descr='file transfer error')
 
@@ -227,7 +227,7 @@ def main():
                         safe_fail(module, device, msg='Config replace operation'
                                   + ' failed.\nValidate the config'
                                   + ' file being applied.')
-                except PYHPError as e:
+                except PYCW7Error as e:
                     safe_fail(module, device, msg=str(e),
                               descr='error during execution')
 

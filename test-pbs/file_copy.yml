@@ -1,7 +1,7 @@
 ---
 
-  - name: HP Comware File Copying
-    hosts: hp2
+  - name: Comware File Copying
+    hosts: test2
     gather_facts: no
     connection: local
 

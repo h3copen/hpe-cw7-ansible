@@ -14,7 +14,7 @@ Synopsis
 
 Added in version 1.8
 
-Enable or Disable L2VPN on a HP Comware 7 device
+Enable or Disable L2VPN on a Comware 7 device
 
 Options
 -------

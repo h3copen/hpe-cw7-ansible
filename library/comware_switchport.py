@@ -127,14 +127,14 @@ EXAMPLES = """
 import socket
 
 try:
-    HAS_PYHP = True
-    from pyhpecw7.comware import HPCOM7
-    from pyhpecw7.features.switchport import Switchport
-    from pyhpecw7.features.vlan import Vlan
-    from pyhpecw7.features.portchannel import Portchannel
-    from pyhpecw7.errors import PYHPError
+    HAS_PYCW7 = True
+    from pycw7.comware import COM7
+    from pycw7.features.switchport import Switchport
+    from pycw7.features.vlan import Vlan
+    from pycw7.features.portchannel import Portchannel
+    from pycw7.errors import PYCW7Error
 except ImportError as ie:
-    HAS_PYHP = False
+    HAS_PYCW7 = False
 
 
 def safe_fail(module, device=None, **kwargs):
@@ -170,9 +170,9 @@ def main():
         supports_check_mode=True
     )
 
-    if not HAS_PYHP:
+    if not HAS_PYCW7:
         safe_fail(module,
-                  msg='There was a problem loading from the pyhpecw7 module')
+                  msg='There was a problem loading from the pycw7 module')
 
     filtered_keys = ('state', 'hostname', 'username', 'password',
                      'port', 'CHECKMODE', 'name', 'look_for_keys')
@@ -182,7 +182,7 @@ def main():
     password = module.params['password']
     port = module.params['port']
 
-    device = HPCOM7(host=hostname, username=username,
+    device = COM7(host=hostname, username=username,
                     password=password, port=port)
 
     name = module.params['name']
@@ -220,7 +220,7 @@ def main():
                 safe_fail(module, device,
                           msg='Vlan {0} does not exist,'.format(pvid)
                           + ' Use vlan module to create it.')
-        except PYHPError as e:
+        except PYCW7Error as e:
             module.fail_json(msg=str(e),
                              descr='Error initializing Vlan object'
                              + ' or getting current vlan config.')
@@ -229,7 +229,7 @@ def main():
     try:
         portchannel = Portchannel(device, '99', 'bridged')
         pc_list = portchannel.get_all_members()
-    except PYHPError as e:
+    except PYCW7Error as e:
         module.fail_json(msg=str(e),
                          descr='Error getting port channel information.')
     if name in pc_list:
@@ -239,7 +239,7 @@ def main():
 
     try:
         switchport = Switchport(device, name)
-    except PYHPError as e:
+    except PYCW7Error as e:
         safe_fail(module, device, msg=str(e),
                   descr='Error initialzing Switchport object.')
 
@@ -251,7 +251,7 @@ def main():
     # Make sure interface is in bridged mode
     try:
         if_info = switchport.interface.get_config()
-    except PYHPError as e:
+    except PYCW7Error as e:
         safe_fail(module, device, msg=str(e),
                   descr='Error getting current interface config.')
 
@@ -261,7 +261,7 @@ def main():
 
     try:
         existing = switchport.get_config()
-    except PYHPError as e:
+    except PYCW7Error as e:
         safe_fail(module, device, msg=str(e),
                   descr='Error getting switchpot config.')
 
@@ -314,7 +314,7 @@ def main():
             try:
                 device.execute_staged()
                 end_state = switchport.get_config()
-            except PYHPError as e:
+            except PYCW7Error as e:
                 safe_fail(module, device, msg=str(e),
                           descr='Error during command execution.')
             changed = True

@@ -127,16 +127,16 @@ EXAMPLES = """
 
 import socket
 try:
-    HAS_PYHP = True
-    from pyhpecw7.comware import HPCOM7
-    from pyhpecw7.features.l2vpn import L2VPN
-    from pyhpecw7.features.interface import Interface
-    from pyhpecw7.utils.validate import valid_ip_network
-    from pyhpecw7.features.vsi import Vsi
-    from pyhpecw7.features.errors import *
-    from pyhpecw7.errors import *
+    HAS_PYCW7 = True
+    from pycw7.comware import COM7
+    from pycw7.features.l2vpn import L2VPN
+    from pycw7.features.interface import Interface
+    from pycw7.utils.validate import valid_ip_network
+    from pycw7.features.vsi import Vsi
+    from pycw7.features.errors import *
+    from pycw7.errors import *
 except ImportError as ie:
-    HAS_PYHP = False
+    HAS_PYCW7 = False
 
 
 def safe_fail(module, device=None, **kwargs):
@@ -180,8 +180,8 @@ def main():
         ),
         supports_check_mode=True
     )
-    if not HAS_PYHP:
-        module.fail_json(msg='There was a problem loading from the pyhpecw7 '
+    if not HAS_PYCW7:
+        module.fail_json(msg='There was a problem loading from the pycw7 '
                          + 'module.', error=str(ie))
 
     filtered_keys = ('state', 'hostname', 'username', 'password',
@@ -202,7 +202,7 @@ def main():
     rd = module.params['rd']
     vpn_target_auto = module.params['vpn_target_auto']
 
-    device = HPCOM7(**device_args)
+    device = COM7(**device_args)
     changed = False
 
     proposed = dict((k, v) for k, v in module.params.items()
@@ -232,7 +232,7 @@ def main():
     try:
         l2vpn = L2VPN(device)
         is_l2vpn_enabled = l2vpn.get_config()
-    except PYHPError as e:
+    except PYCW7Error as e:
         safe_fail(module, device, msg=str(e), descr='L2VPN check failed')
 
     if is_l2vpn_enabled == 'disabled':
@@ -241,7 +241,7 @@ def main():
     if gateway_intf:
         try:
             interface = Interface(device,gateway_intf)
-        except PYHPError as e:
+        except PYCW7Error as e:
             safe_fail(module,msg='Error occurred while checking interface {0}'.format(gateway_intf))
 
         if not interface.iface_exists:
@@ -250,12 +250,12 @@ def main():
     try:
         VSI = Vsi(device, vsi)
         existing = VSI.get_config()
-    except PYHPError as e:
+    except PYCW7Error as e:
         safe_fail(module, device, msg=str(e), descr='could not obtain existing')
 
     try:
         VSI.param_check(**proposed)
-    except PYHPError as e:
+    except PYCW7Error as e:
         safe_fail(module,device,
                   descr='There was problem with the supplied parameters.',
                   msg=str(e))
@@ -283,7 +283,7 @@ def main():
             try:
                 device.execute_staged()
                 end_state = VSI.get_config()
-            except PYHPError as e:
+            except PYCW7Error as e:
                 safe_fail(module, device, msg=str(e),
                           descr='failed during execution')
             changed = True

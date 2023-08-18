@@ -121,17 +121,17 @@ EXAMPLE = """
 
 # e.g.ensure the dir exsits
       - name: get diagnostic information to the file server
-        comware_log:  diag_dir=flash:/diaglog service_dir=/root/ansible-hpe-cw7-master/diaglog/ ftpupload=true 
+        comware_log:  diag_dir=flash:/diaglog service_dir=/root/pycw7-ansible-master/diaglog/ ftpupload=true 
         username={{ username }} password={{ password }} hostname={{ inventory_hostname }}     
               
       - name: delete diagnostic information in device
         comware_log:  state=loadtoserver servertype=ftp server_hostname=192.168.1.199 server_name=fc server_pwd=111111 
-        diag_dir=flash:/diaglog service_dir=/root/ansible-hpe-cw7-master/diaglog/ dst_dir= 
+        diag_dir=flash:/diaglog service_dir=/root/pycw7-ansible-master/diaglog/ dst_dir= 
         username={{ username }} password={{ password }} hostname={{ inventory_hostname }} 
                                        
       # - name: delete diagnostic information in device
         # comware_log:  state=loadtoserver servertype=scp server_hostname=192.168.1.185 server_name=h3c server_pwd=h3c 
-        diag_dir=flash:/diaglog service_dir=/root/ansible-hpe-cw7-master/diaglog/ dst_dir=flash:/ 
+        diag_dir=flash:/diaglog service_dir=/root/pycw7-ansible-master/diaglog/ dst_dir=flash:/ 
         username={{ username }} password={{ password }} hostname={{ inventory_hostname }} 
         
       - name: delete diagnostic information in device
@@ -147,14 +147,14 @@ import hashlib
 from scp import SCPClient
 
 try:
-    HAS_PYHP = True
-    from pyhpecw7.comware import HPCOM7
-    from pyhpecw7.features.file_copy import FileCopy
-    from pyhpecw7.features.errors import InterfaceError
+    HAS_PYCW7 = True
+    from pycw7.comware import COM7
+    from pycw7.features.file_copy import FileCopy
+    from pycw7.features.errors import InterfaceError
     from ftplib import FTP
-    from pyhpecw7.errors import *
+    from pycw7.errors import *
 except ImportError as ie:
-    HAS_PYHP = False
+    HAS_PYCW7 = False
 
 
 def safe_fail(module, device=None, **kwargs):
@@ -189,8 +189,8 @@ def main():
         supports_check_mode=True
     )
 
-    if not HAS_PYHP:
-        safe_fail(module, msg='There was a problem loading from the pyhpecw7 '
+    if not HAS_PYCW7:
+        safe_fail(module, msg='There was a problem loading from the pycw7 '
                   + 'module.', error=str(ie))
 
     filtered_keys = ('state', 'hostname', 'username', 'password',
@@ -200,7 +200,7 @@ def main():
     username = module.params['username']
     password = module.params['password']
     port = module.params['port']
-    device = HPCOM7(host=hostname, username=username,
+    device = COM7(host=hostname, username=username,
                     password=password, port=port,timeout=300)
     state = module.params['state']
     diag_dir = module.params['diag_dir']
@@ -311,7 +311,7 @@ def main():
         else:
             try:
                 device.execute_staged()
-            except PYHPError as e:
+            except PYCW7Error as e:
                 safe_fail(module, device, msg=str(e),
                           descr='Error on device execution.')
             changed = True

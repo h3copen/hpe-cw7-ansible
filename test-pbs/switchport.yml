@@ -1,7 +1,7 @@
 ---
 
-  - name: HP Comware switchport automation
-    hosts: hp2
+  - name: Comware switchport automation
+    hosts: test2
     gather_facts: no
     connection: local
 

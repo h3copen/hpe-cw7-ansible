@@ -103,7 +103,7 @@ Examples
     - comware_command: command='display vlan 5' type=display username={{ username }} password={{ password }} hostname={{ inventory_hostname }}
     
     # execute command by using file
-    - comware_command: file_txt=/root/ansible-hpe-cw7-master/test.txt type=config username={{ username }} password={{ password }} hostname={{ inventory_hostname }}
+    - comware_command: file_txt=/root/pycw7-master/test.txt type=config username={{ username }} password={{ password }} hostname={{ inventory_hostname }}
     
     # display vlans passing in a list
     - comware_command:

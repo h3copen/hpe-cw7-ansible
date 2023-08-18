@@ -2,14 +2,14 @@ from distutils.core import setup
 from setuptools import find_packages
 
 setup(
-  name='pyhpecw7',
+  name='pycw7',
   packages=find_packages(),
   version='0.0.11',
-  description='Python package to simplify working with HPE Comware7 Based devices ',
-  author='HPE',
+  description='Python package to simplify working with H3C Comware7 Based devices ',
+  author='H3C',
   license='Apache2',
-  url='https://github.com/hpenetworking/pyhpecw7',
-  download_url='https://github.com/hpenetworking/pyhpecw7/tarball/0.0.9',
+  url='https://github.com/H3C/pycw7',
+  download_url='https://github.com/H3C/pycw7/tarball/0.0.9',
   classifiers=[
         # How mature is this project? Common values are
         #   3 - Alpha
@@ -27,9 +27,9 @@ setup(
         'Topic :: Software Development :: Libraries :: Python Modules'
 
     ],
-  keywords='HPE Comware7 FlexFabric Netconf API ',
+  keywords='H3C Comware7 FlexFabric Netconf API ',
 
-  package_data={'pyhpecw7': ['utils/templates/textfsm_temps/*.tmpl']},
+  package_data={'pycw7': ['utils/templates/textfsm_temps/*.tmpl']},
   install_requires=[
       'textfsm==1.1.0',
       'lxml',

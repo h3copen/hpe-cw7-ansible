@@ -144,7 +144,7 @@ class RPCReply(object):
         #     print(str(self._reply))
         #     res = re.sub(r"<CLI>.*</CLI>", "<ok/>", str(self._raw))
             str1 = '''<?xml version=\"1.0\" encoding=\"UTF-8\"?>
-                        <rpc-reply xmlns:config=\"http://www.hp.com/netconf/config:1.0\" xmlns:data=\"http://www.hp.com/netconf/data:1.0\" xmlns=\"urn:ietf:params:xml:ns:netconf:base:1.0\" message-id=\"urn:uuid:db6c046f-db5d-40fb-b431-7c1057feddbb\">
+                        <rpc-reply xmlns:config=\"http://www.h3c.com/netconf/config:1.0\" xmlns:data=\"http://www.h3c.com/netconf/data:1.0\" xmlns=\"urn:ietf:params:xml:ns:netconf:base:1.0\" message-id=\"urn:uuid:db6c046f-db5d-40fb-b431-7c1057feddbb\">
                             <ok/>
                         </rpc-reply>\n
                   '''

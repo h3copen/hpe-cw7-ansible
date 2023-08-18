@@ -1,13 +1,13 @@
 ---
 
-  - name: HP Comware vrrp global mode testing
-    hosts: hp2
+  - name: Comware vrrp global mode testing
+    hosts: test2
     gather_facts: no
     connection: local
 
     vars:
-      username: hp
-      password: hp123
+      username: test
+      password: test123
 
     tasks:
 

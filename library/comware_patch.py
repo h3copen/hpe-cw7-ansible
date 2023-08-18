@@ -77,7 +77,7 @@ options:
 EXAMPLES = '''
 
       - name: copy version from ansible server into switch.
-        comware_file_copy: file=/root/ansible-hpe-cw7-master/gqy/s6820-cmw710-system-weak-patch-f6205p05h16.bin remote_path=flash:/s6820-cmw710-system-weak-patch-f6205p05h16.bin username={{ username }} password={{ password }} hostname={{ inventory_hostname }}
+        comware_file_copy: file=/root/pycw7-ansible-master/gqy/s6820-cmw710-system-weak-patch-f6205p05h16.bin remote_path=flash:/s6820-cmw710-system-weak-patch-f6205p05h16.bin username={{ username }} password={{ password }} hostname={{ inventory_hostname }}
 
       - name: check bin is exit or not and active it.
         comware_patch: patchname=patch.bin activate=true username={{ username }} password={{ password }} hostname={{ inventory_hostname }}
@@ -95,12 +95,12 @@ import time
 
 
 try:
-    HAS_PYHP = True
-    from pyhpecw7.comware import HPCOM7
-    from pyhpecw7.features.errors import *
-    from pyhpecw7.features.patch import Patch
+    HAS_PYCW7 = True
+    from pycw7.comware import COM7
+    from pycw7.features.errors import *
+    from pycw7.features.patch import Patch
 except ImportError as ie:
-    HAS_PYHP = False
+    HAS_PYCW7 = False
 
 
 def safe_fail(module, device=None, **kwargs):
@@ -129,8 +129,8 @@ def main():
         ),
         supports_check_mode=True
     )
-    if not HAS_PYHP:
-        module.fail_json(msg='There was a problem loading from the pyhpecw7 '
+    if not HAS_PYCW7:
+        module.fail_json(msg='There was a problem loading from the pycw7 '
                              + 'module.', error=str(ie))
 
     username = module.params['username']
@@ -143,7 +143,7 @@ def main():
     device_args = dict(host=hostname, username=username,
                        password=password, port=port, timeout=90)
     args = dict(patchname=patchname, activate=activate, check_result=check_result)
-    device = HPCOM7(**device_args)
+    device = COM7(**device_args)
     proposed = dict((k, v) for k, v in args.items() if v is not None)
 
 
@@ -182,7 +182,7 @@ def main():
         else:
             try:
                 device.execute_staged()
-            except PYHPError as e:
+            except PYCW7Error as e:
                 safe_fail(module, device, msg=str(e),
                           descr='error during execution')
             changed = True

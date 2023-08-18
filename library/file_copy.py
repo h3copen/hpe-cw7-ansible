@@ -1,12 +1,12 @@
-"""Manage file transfer to HPCOM7 devices.
+"""Manage file transfer to COM7 devices.
 author: liudongxue
 """
 from scp import SCPClient
 from lxml import etree
-from pyhpecw7.utils.xml.lib import *
-from pyhpecw7.features.errors import FileNotEnoughSpaceError,\
+from pycw7.utils.xml.lib import *
+from pycw7.features.errors import FileNotEnoughSpaceError,\
     FileNotReadableError, FileRemoteDirDoesNotExist, FileTransferError, FileHashMismatchError
-from pyhpecw7.errors import NCError
+from pycw7.errors import NCError
 from ftplib import FTP
 import paramiko
 import hashlib
@@ -15,13 +15,13 @@ import os
 
 
 class FileCopy(object):
-    """This class is used to copy local files to a ``HPCOM7`` device.
+    """This class is used to copy local files to a ``COM7`` device.
 
     Note:
         SCP should first be enabled on the device.
 
     Note:
-        When using this class, the passed in ``HPCOM7`` object should
+        When using this class, the passed in ``COM7`` object should
         be constructed with the ``timeout`` equal to at least 60 seconds.
         Remote MD5 sum calculations can take some time.
 
@@ -32,8 +32,8 @@ class FileCopy(object):
         ``FileRemoteDirDoesNotExist`` exception will be raised.
 
     Args:
-        device (HPCOM7): connected instance of
-            a ``pyhpecw7.comware.HPCOM7`` object.
+        device (COM7): connected instance of
+            a ``pycw7.comware.COM7`` object.
         src (str): Full path to local file to be copied.
         dst (str): OPTIONAL - Full path or filename of remote file.
             If just a filename is supplied, 'flash:/' will be prepended.
@@ -43,8 +43,8 @@ class FileCopy(object):
             the SCP connection is made. Defaults to 22.
 
     Attributes:
-        device (HPCOM7): connected instance of
-            a ``pyhpecw7.comware.HPCOM7`` object.
+        device (COM7): connected instance of
+            a ``pycw7.comware.COM7`` object.
         src (str): Full path to local file to be copied.
         dst (str): Full path of remote file.
         port (int): The SSH port over which

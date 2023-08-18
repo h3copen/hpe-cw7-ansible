@@ -96,21 +96,21 @@ EXAMPLES = """
 - comware_file_copy: file=/usr/smallfile remote_path=flash:/otherfile 
   username={{ username }} password={{ password }} hostname={{ inventory_hostname }}
   
-- comware_file_copy: file=/root/ansible-hpe-cw7-master/hp-vlans.yml remote_path=flash:/ldx/hp-vlans.yml 
+- comware_file_copy: file=/root/pycw7-ansible-master/vlans.yml remote_path=flash:/ldx/vlans.yml 
   ftpupload=true username={{ username }} password={{ password }}   hostname={{ inventory_hostname }}
   
 # name: use FTP to download files to the server--module 1.3
-  comware_file_copy: file=/root/ansible-hpe-cw7-master/11.txt remote_path=flash:/llld/11.txt ftpdownload=true username={{ username }} password={{ password }}   hostname={{ inventory_hostname }}
+  comware_file_copy: file=/root/pycw7-ansible-master/11.txt remote_path=flash:/llld/11.txt ftpdownload=true username={{ username }} password={{ password }}   hostname={{ inventory_hostname }}
   """
 import socket
 
 try:
-    HAS_PYHP = True
-    from pyhpecw7.comware import HPCOM7
-    from pyhpecw7.features.file_copy import FileCopy
-    from pyhpecw7.errors import *
+    HAS_PYCW7 = True
+    from pycw7.comware import COM7
+    from pycw7.features.file_copy import FileCopy
+    from pycw7.errors import *
 except ImportError as ie:
-    HAS_PYHP = False
+    HAS_PYCW7 = False
 
 
 def safe_fail(module, device=None, **kwargs):
@@ -141,8 +141,8 @@ def main():
         supports_check_mode=False
     )
 
-    if not HAS_PYHP:
-        safe_fail(module, msg='There was a problem loading from the pyhpecw7 '
+    if not HAS_PYCW7:
+        safe_fail(module, msg='There was a problem loading from the pycw7 '
                   + 'module.', error=str(ie))
 
     hostname = socket.gethostbyname(module.params['hostname'])
@@ -150,7 +150,7 @@ def main():
     password = module.params['password']
     port = module.params['port']
 
-    device = HPCOM7(host=hostname, username=username,
+    device = COM7(host=hostname, username=username,
                     password=password, port=port, timeout=1200)
 
     src = module.params.get('file')
@@ -184,7 +184,7 @@ def main():
                 safe_fail(module,msg='The remote path not exists , please check it')
         changed = True
         
-    except PYHPError as fe:
+    except PYCW7Error as fe:
         safe_fail(module, device, msg=str(fe),
                   descr='Error transferring file.')
 

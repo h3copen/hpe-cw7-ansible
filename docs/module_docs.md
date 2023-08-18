@@ -1,5 +1,5 @@
-# HPE Networking Comware 7 Ansible Docs
-### *Network Automation with HPE and Ansible*
+# H3C Networking Comware 7 Ansible Docs
+### *Network Automation with H3C and Ansible*
 
 ---
 ### Requirements
@@ -568,7 +568,7 @@ Manage global config state for L2VPN
   * Examples
 
 #### Synopsis
- Enable or Disable L2VPN on a HP Comware 7 device
+ Enable or Disable L2VPN on a Comware 7 device
 
 #### Options
 
@@ -768,8 +768,8 @@ Activate a new current-running config in realtime
 
 # install config file that will be the new running config
 - comware_install_config:
-    config_file='/home/ansible/projects/pyhpecw7comware/newconfig.cfg'
-    diff_file='/home/ansible/projects/pyhpecw7comware/diffs.diff'
+    config_file='/home/ansible/projects/pycw7comware/newconfig.cfg'
+    diff_file='/home/ansible/projects/pycw7comware/diffs.diff'
     commit_changes=true
     username={{ username }}
     password={{ password }}
@@ -1207,7 +1207,7 @@ Manages mapping of an Ethernet Service to a VSI (VXLAN ID)
 
 
 ## comware_clean_erase
-Factory default HP Comware 7 device
+Factory default Comware 7 device
 
   * Synopsis
   * Options
@@ -1598,7 +1598,7 @@ Enter the configuration command and compare it with the expected result
 ```
 
 # - name: compare 
-#   comware_compare: cmd='dis curr conf | include ssh' result='/root/ansible-hpe-cw7-master/gqy/result.txt' 
+#   comware_compare: cmd='dis curr conf | include ssh' result='/root/pycw7-master/gqy/result.txt' 
     username={{ username }} password={{ password }} hostname={{ inventory_hostname }}
 	   
 ```
@@ -1882,17 +1882,17 @@ get the device diagnostic information and upload to file server
 
 ```
       - name: get diagnostic information to the file server
-        comware_log:  diag_dir=flash:/diaglog service_dir=/root/ansible-hpe-cw7-master/diaglog/ ftpupload=true 
+        comware_log:  diag_dir=flash:/diaglog service_dir=/root/pycw7-master/diaglog/ ftpupload=true 
         username={{ username }} password={{ password }} hostname={{ inventory_hostname }}     
               
       - name: delete diagnostic information in device
         comware_log:  state=loadtoserver servertype=ftp server_hostname=192.168.1.199 server_name=fc server_pwd=111111 
-        diag_dir=flash:/diaglog service_dir=/root/ansible-hpe-cw7-master/diaglog/ dst_dir= 
+        diag_dir=flash:/diaglog service_dir=/root/pycw7-master/diaglog/ dst_dir= 
         username={{ username }} password={{ password }} hostname={{ inventory_hostname }} 
                                        
       # - name: delete diagnostic information in device
         # comware_log:  state=loadtoserver servertype=scp server_hostname=192.168.1.185 server_name=h3c server_pwd=h3c 
-        diag_dir=flash:/diaglog service_dir=/root/ansible-hpe-cw7-master/diaglog/ dst_dir=flash:/ 
+        diag_dir=flash:/diaglog service_dir=/root/pycw7-master/diaglog/ dst_dir=flash:/ 
         username={{ username }} password={{ password }} hostname={{ inventory_hostname }} 
         
       - name: delete diagnostic information in device
@@ -2344,7 +2344,7 @@ Rollback the running configuration
 
 ```
       - name: copy version from ansible server into switch.
-        comware_file_copy: file=/root/ansible-hpe-cw7-master/gqy/s6820-cmw710-system-weak-patch-f6205p05h16.bin remote_path=flash:/s6820-cmw710-system-weak-patch-f6205p05h16.bin username={{ username }} password={{ password }} hostname={{ inventory_hostname }}
+        comware_file_copy: file=/root/pycw7-master/gqy/s6820-cmw710-system-weak-patch-f6205p05h16.bin remote_path=flash:/s6820-cmw710-system-weak-patch-f6205p05h16.bin username={{ username }} password={{ password }} hostname={{ inventory_hostname }}
 
       - name: check bin is exit or not and active it.
         comware_patch: patchname=patch.bin activate=true username={{ username }} password={{ password }} hostname={{ inventory_hostname }}
@@ -2445,7 +2445,7 @@ Rollback the running configuration
 
 # files compared
 - comware_rollback: filename=123.cfg comparefile=test.cfg username={{ username }} password={{ password }} hostname={{ inventory_hostname }}
-  diff_file='/root/ansible-hpe-cw7-master/diffs.diff'
+  diff_file='/root/pycw7-master/diffs.diff'
 ```
 
 
@@ -2829,7 +2829,7 @@ config the next restart file or ipe .   patch function not available,please use 
     username={{ username }} password={{ password }} hostname={{ inventory_hostname }} 
       
 #Show content for the existing config file
-  comware_startup: filename='flash:/123.cfg' show_file='/root/ansible-hpe-cw7-master/123.cfg' username={{ username }} password={{ password }} hostname={{ inventory_hostname }}
+  comware_startup: filename='flash:/123.cfg' show_file='/root/pycw7-master/123.cfg' username={{ username }} password={{ password }} hostname={{ inventory_hostname }}
 
 ```
 

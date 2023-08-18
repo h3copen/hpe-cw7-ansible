@@ -93,7 +93,7 @@ Examples
     
         
     # - name: compare 
-    #   comware_compare: cmd='dis curr conf | include ssh' result='/root/ansible-hpe-cw7-master/gqy/result.txt' 
+    #   comware_compare: cmd='dis curr conf | include ssh' result='/root/pycw7-master/gqy/result.txt' 
                        username={{ username }} password={{ password }} hostname={{ inventory_hostname }}
 
     

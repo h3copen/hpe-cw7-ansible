@@ -67,13 +67,13 @@ EXAMPLES = """
 
 import socket
 try:
-    HAS_PYHP = True
-    from pyhpecw7.features.facts import Facts
-    from pyhpecw7.comware import HPCOM7
-    from pyhpecw7.features.errors import *
-    from pyhpecw7.errors import *
+    HAS_PYCW7 = True
+    from pycw7.features.facts import Facts
+    from pycw7.comware import COM7
+    from pycw7.features.errors import *
+    from pycw7.errors import *
 except ImportError as ie:
-    HAS_PYHP = False
+    HAS_PYCW7 = False
 
 
 def safe_fail(module, device=None, **kwargs):
@@ -100,8 +100,8 @@ def main():
         supports_check_mode=False
     )
 
-    if not HAS_PYHP:
-        safe_fail(module, msg='There was a problem loading from the pyhpecw7 '
+    if not HAS_PYCW7:
+        safe_fail(module, msg='There was a problem loading from the pycw7 '
                   + 'module.', error=str(ie))
 
     username = module.params['username']
@@ -112,7 +112,7 @@ def main():
     device_args = dict(host=hostname, username=username,
                        password=password, port=port)
 
-    device = HPCOM7(**device_args)
+    device = COM7(**device_args)
 
     try:
         look_for_keys = module.params['look_for_keys']
@@ -123,13 +123,13 @@ def main():
 
     try:
         facts = Facts(device)
-    except PYHPError as e:
+    except PYCW7Error as e:
         safe_fail(module, device, msg=str(e),
                   descr='error collecting facts')
 
-    hpfacts = facts.facts
+    device_facts = facts.facts
 
-    safe_exit(module, device, ansible_facts=hpfacts)
+    safe_exit(module, device, ansible_facts=device_facts)
 
 from ansible.module_utils.basic import *
 main()

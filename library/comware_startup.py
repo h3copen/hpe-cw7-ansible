@@ -133,7 +133,7 @@ EXAMPLE = """
     username={{ username }} password={{ password }} hostname={{ inventory_hostname }} 
       
 #Show content for the existing config file
-  comware_startup: filename='flash:/123.cfg' show_file='/root/ansible-hpe-cw7-master/123.cfg' username={{ username }} password={{ password }} hostname={{ inventory_hostname }}
+  comware_startup: filename='flash:/123.cfg' show_file='/root/pycw7-ansible-master/123.cfg' username={{ username }} password={{ password }} hostname={{ inventory_hostname }}
 """
 
 import socket
@@ -141,13 +141,13 @@ import os
 import re
 
 try:
-    HAS_PYHP = True
-    from pyhpecw7.comware import HPCOM7
-    from pyhpecw7.features.file import File
-    from pyhpecw7.features.set_startup import SetStartup
-    from pyhpecw7.errors import *
+    HAS_PYCW7 = True
+    from pycw7.comware import COM7
+    from pycw7.features.file import File
+    from pycw7.features.set_startup import SetStartup
+    from pycw7.errors import *
 except ImportError as ie:
-    HAS_PYHP = False
+    HAS_PYCW7 = False
 
 
 def safe_fail(module, device=None, **kwargs):
@@ -199,8 +199,8 @@ def main():
         supports_check_mode=True
     )
 
-    if not HAS_PYHP:
-        safe_fail(module, msg='There was a problem loading from the pyhpecw7 '
+    if not HAS_PYCW7:
+        safe_fail(module, msg='There was a problem loading from the pycw7 '
                   + 'module.', error=str(ie))
 
     ipe_package = module.params.get('ipe_package')
@@ -215,7 +215,7 @@ def main():
     password = module.params['password']
     port = module.params['port']
 
-    device = HPCOM7(host=hostname, username=username,
+    device = COM7(host=hostname, username=username,
                     password=password, port=port, timeout=1200)
 
     changed = False
@@ -243,7 +243,7 @@ def main():
         try:
             ios = SetStartup(device)
             existing = ios.get_reboot_config()
-        except PYHPError:
+        except PYCW7Error:
             safe_fail(module, device, msg=str(e),
                       descr='Error getting current config.')
 
@@ -314,7 +314,7 @@ def main():
             else:
                 try:
                     device.execute_staged()
-                except PYHPError as e:
+                except PYCW7Error as e:
                     safe_fail(module, device, msg=str(e),
                               descr='Error executing commands.')
                 changed = True
@@ -338,7 +338,7 @@ def main():
                 msg='file {0} not in the flash,please check the name of the startup file'.format(nextstartupfile))
         try:
             startup_file.build_startupfile(nextstartupfile)
-        except PYHPError as e:
+        except PYCW7Error as e:
             safe_fail(module, device, msg=str(e),
                       descr='Failed to set startup file.')
         changed = True
@@ -363,7 +363,7 @@ def main():
         try:
             filecontent = config_file.get_file_content()
             write_content(show_file, filecontent)
-        except PYHPError as e:
+        except PYCW7Error as e:
             safe_fail(module, device, msg=str(e),
                       descr='Failed to get content for the file.')
 

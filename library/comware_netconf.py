@@ -103,13 +103,13 @@ comware_netconf: soap=http ssh=enable username={{ username }} password={{ passwo
 
 import socket
 try:
-    HAS_PYHP = True
-    from pyhpecw7.features.netconf import Netconf
-    from pyhpecw7.comware import HPCOM7
-    from pyhpecw7.features.errors import *
-    from pyhpecw7.errors import *
+    HAS_PYCW7 = True
+    from pycw7.features.netconf import Netconf
+    from pycw7.comware import COM7
+    from pycw7.features.errors import *
+    from pycw7.errors import *
 except ImportError as ie:
-    HAS_PYHP = False
+    HAS_PYCW7 = False
 
 
 def safe_fail(module, device=None, **kwargs):
@@ -140,8 +140,8 @@ def main():
         ),
         supports_check_mode=True
     )
-    if not HAS_PYHP:
-        module.fail_json(msg='There was a problem loading from the pyhpecw7 '
+    if not HAS_PYCW7:
+        module.fail_json(msg='There was a problem loading from the pycw7 '
                          + 'module.', error=str(ie))
 
     username = module.params['username']
@@ -152,7 +152,7 @@ def main():
     device_args = dict(host=hostname, username=username,
                        password=password, port=port)
 
-    device = HPCOM7(**device_args)
+    device = COM7(**device_args)
     source = module.params['source']
     soap = module.params['soap']
     ssh = module.params['ssh']
@@ -173,7 +173,7 @@ def main():
 
     try:
         netConf = Netconf(device, source, operation, opera_type, soap, ssh)
-    except PYHPError as e:
+    except PYCW7Error as e:
         safe_fail(module, device, msg=str(e))
 
     if state == 'present':
@@ -191,7 +191,7 @@ def main():
         else:
             try:
                 device.execute_staged()
-            except PYHPError as e:
+            except PYCW7Error as e:
                 safe_fail(module, device, msg=str(e),
                           descr='error during execution')
             changed = True

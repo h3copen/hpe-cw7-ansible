@@ -117,12 +117,12 @@ import os
 import re
 
 try:
-    HAS_PYHP = True
-    from pyhpecw7.comware import HPCOM7
-    from pyhpecw7.features.snmp_group import SnmpGroup
-    from pyhpecw7.errors import *
+    HAS_PYCW7 = True
+    from pycw7.comware import COM7
+    from pycw7.features.snmp_group import SnmpGroup
+    from pycw7.errors import *
 except ImportError as ie:
-    HAS_PYHP = False
+    HAS_PYCW7 = False
 
 
 def safe_fail(module, device=None, **kwargs):
@@ -212,8 +212,8 @@ def main():
         supports_check_mode=True
     )
 
-    if not HAS_PYHP:
-        safe_fail(module, msg='There was a problem loading from the pyhpecw7 '
+    if not HAS_PYCW7:
+        safe_fail(module, msg='There was a problem loading from the pycw7 '
                   + 'module.', error=str(ie))
 
     proposed = dict()
@@ -244,7 +244,7 @@ def main():
     proposed = dict((k, v) for k, v in module.params.items()
                     if v is not None and k not in filtered_keys)
 
-    device = HPCOM7(**device_args)
+    device = COM7(**device_args)
 
     try:
         look_for_keys = module.params['look_for_keys']
@@ -256,7 +256,7 @@ def main():
     if group_name:
         try:
             snmp_group_obj = SnmpGroup(device, group_name, version, security_level)
-        except PYHPError as e:
+        except PYCW7Error as e:
             safe_fail(module,
                       device,
                       descr='There was problem recognizing that group_name.',
@@ -264,7 +264,7 @@ def main():
 
         try:
             param_check_snmp_group(module = module)
-        except PYHPError as e:
+        except PYCW7Error as e:
             safe_fail(module,
                       device,
                       descr='There was problem with the supplied parameters.',
@@ -272,7 +272,7 @@ def main():
 
         try:
             existing = snmp_group_obj.get_config()
-        except PYHPError as e:
+        except PYCW7Error as e:
             safe_fail(module, device, msg=str(e),
                       descr='Error getting existing config.')
 
@@ -298,7 +298,7 @@ def main():
                 try:
                     device.execute_staged()
                     end_state = snmp_group_obj.get_config()
-                except PYHPError as e:
+                except PYCW7Error as e:
                     safe_fail(module, device, msg=str(e),
                               descr='error during execution')
                 changed = True

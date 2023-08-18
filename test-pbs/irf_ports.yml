@@ -1,7 +1,7 @@
 ---
 
-  - name: HP Comware IRF Ports testing
-    hosts: hp2
+  - name: Comware IRF Ports testing
+    hosts: test2
     gather_facts: no
     connection: local
 

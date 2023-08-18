@@ -143,17 +143,17 @@ Examples
         
     # e.g.ensure the dir exsits
           - name: get diagnostic information to the file server
-            comware_log:  diag_dir=flash:/diaglog service_dir=/root/ansible-hpe-cw7-master/diaglog/ ftpupload=true 
+            comware_log:  diag_dir=flash:/diaglog service_dir=/root/pycw7-master/diaglog/ ftpupload=true 
             username={{ username }} password={{ password }} hostname={{ inventory_hostname }}     
                   
           - name: delete diagnostic information in device
             comware_log:  state=loadtoserver servertype=ftp server_hostname=192.168.1.199 server_name=fc server_pwd=111111 
-            diag_dir=flash:/diaglog service_dir=/root/ansible-hpe-cw7-master/diaglog/ dst_dir= 
+            diag_dir=flash:/diaglog service_dir=/root/pycw7-master/diaglog/ dst_dir= 
             username={{ username }} password={{ password }} hostname={{ inventory_hostname }} 
                                            
           # - name: delete diagnostic information in device
             # comware_log:  state=loadtoserver servertype=scp server_hostname=192.168.1.185 server_name=h3c server_pwd=h3c 
-            diag_dir=flash:/diaglog service_dir=/root/ansible-hpe-cw7-master/diaglog/ dst_dir=flash:/ 
+            diag_dir=flash:/diaglog service_dir=/root/pycw7-master/diaglog/ dst_dir=flash:/ 
             username={{ username }} password={{ password }} hostname={{ inventory_hostname }} 
             
           - name: delete diagnostic information in device

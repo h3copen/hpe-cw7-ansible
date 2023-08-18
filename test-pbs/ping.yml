@@ -1,7 +1,7 @@
 ---
 
-  - name: HP Comware facts
-    hosts: hp1
+  - name: Comware facts
+    hosts: test1
     gather_facts: no
     connection: local
 

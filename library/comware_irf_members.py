@@ -152,15 +152,15 @@ import socket
 from ncclient.operations.errors import TimeoutExpiredError
 
 try:
-    HAS_PYHP = True
-    from pyhpecw7.comware import HPCOM7
-    from pyhpecw7.features.irf import IrfMember
-    from pyhpecw7.features.interface import Interface
-    from pyhpecw7.features.reboot import Reboot
-    from pyhpecw7.features.errors import *
-    from pyhpecw7.errors import *
+    HAS_PYCW7 = True
+    from pycw7.comware import COM7
+    from pycw7.features.irf import IrfMember
+    from pycw7.features.interface import Interface
+    from pycw7.features.reboot import Reboot
+    from pycw7.features.errors import *
+    from pycw7.errors import *
 except ImportError as ie:
-    HAS_PYHP = False
+    HAS_PYCW7 = False
 
 
 def convert_iface_list(device, iface_list):
@@ -209,9 +209,9 @@ def main():
         supports_check_mode=True
     )
 
-    if not HAS_PYHP:
+    if not HAS_PYCW7:
         module.fail_json(
-            msg='There was a problem loading from the pyhpecw7comware module')
+            msg='There was a problem loading from the pycw7comware module')
 
     filtered_keys = ('hostname', 'username', 'password',
                      'port', 'CHECKMODE', 'look_for_keys')
@@ -221,7 +221,7 @@ def main():
     password = module.params['password']
     port = module.params['port']
 
-    device = HPCOM7(host=hostname, username=username,
+    device = COM7(host=hostname, username=username,
                     password=password, port=port)
 
     member_id = module.params.pop('member_id')
@@ -239,7 +239,7 @@ def main():
     try:
         irfm = IrfMember(device)
         existing = irfm.get_config(member_id)
-    except PYHPError as e:
+    except PYCW7Error as e:
         if isinstance(e, IRFMemberDoesntExistError):
             new_member_id = module.params.get('new_member_id')
             try:
@@ -249,7 +249,7 @@ def main():
                     existing = irfm.get_config(member_id)
                 else:
                     safe_fail(module, device, msg=str(e))
-            except PYHPError as e:
+            except PYCW7Error as e:
                 safe_fail(module, device, msg=str(e))
         else:
             safe_fail(module, device, msg=str(e))
@@ -283,7 +283,7 @@ def main():
                 irfm.build(
 					stage=True,
                     member_id=member_id, mad_exclude=mad_delta, **delta)
-            except PYHPError as e:
+            except PYCW7Error as e:
                 safe_fail(module, device, msg=str(e),
                           descr='There was an error preparing the'
                           + ' IRF membership configuration.')
@@ -304,7 +304,7 @@ def main():
             try:
                 device.execute_staged()
                 end_state = irfm.get_config(member_id)
-            except PYHPError as e:
+            except PYCW7Error as e:
                 safe_fail(module, device, msg=str(e))
             changed = True
 
@@ -327,7 +327,7 @@ def main():
             my_reboot.build(reboot=True)
             changed = True
             device.execute()
-        except PYHPError as e:
+        except PYCW7Error as e:
             if isinstance(e, NCTimeoutError)\
                     or isinstance(e, ConnectionClosedError):
                 module.exit_json(**results)

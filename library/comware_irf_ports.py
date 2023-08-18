@@ -129,13 +129,13 @@ EXAMPLES = """
 import socket
 
 try:
-    HAS_PYHP = True
-    from pyhpecw7.comware import HPCOM7
-    from pyhpecw7.features.irf import *
-    from pyhpecw7.features.interface import Interface
-    from pyhpecw7.errors import *
+    HAS_PYCW7 = True
+    from pycw7.comware import COM7
+    from pycw7.features.irf import *
+    from pycw7.features.interface import Interface
+    from pycw7.errors import *
 except ImportError as ie:
-    HAS_PYHP = False
+    HAS_PYCW7 = False
 
 
 def convert_iface_list(device, iface_list):
@@ -182,9 +182,9 @@ def main():
         supports_check_mode=True
     )
 
-    if not HAS_PYHP:
+    if not HAS_PYCW7:
         module.fail_json(
-            msg='There was a problem loading from the pyhpecw7comware module')
+            msg='There was a problem loading from the pycw7comware module')
 
     filtered_keys = ('hostname', 'username', 'password',
                      'port', 'CHECKMODE', 'member_id', 'look_for_keys')
@@ -194,7 +194,7 @@ def main():
     password = module.params['password']
     port = module.params['port']
 
-    device = HPCOM7(host=hostname, username=username,
+    device = COM7(host=hostname, username=username,
                     password=password, port=port)
 
     member_id = module.params.get('member_id')
@@ -210,13 +210,13 @@ def main():
     try:
         irf_mem = IrfMember(device)
         irf_mem.get_config(member_id)
-    except PYHPError as e:
+    except PYCW7Error as e:
         module.fail_json(msg=str(e))
 
     try:
         irf_ports = IrfPort(device)
         existing_full = irf_ports.get_config()
-    except PYHPError as e:
+    except PYCW7Error as e:
         safe_fail(module, device, msg=str(e),
                   descr='Error getting current configuration.')
 
@@ -242,7 +242,7 @@ def main():
     try:
         irf_p1 = convert_iface_list(device, irf_p1)
         irf_p2 = convert_iface_list(device, irf_p2)
-    except PYHPError as ie:
+    except PYCW7Error as ie:
         safe_fail(module, device, msg=str(ie),
                   descr='Error recognizing physical interface.')
 
@@ -284,7 +284,7 @@ def main():
                             irf_p2=irf_p2,
                             filename=filename,
                             activate=activate)
-        except PYHPError as e:
+        except PYCW7Error as e:
             safe_fail(module, device, msg=str(e),
                       descr='Error preparing IRF port config.')
 
@@ -310,7 +310,7 @@ def main():
                 changed = True
                 results['changed'] = changed
                 results['end_state'] = end_state
-            except PYHPError as e:
+            except PYCW7Error as e:
                 if isinstance(e, NCTimeoutError)\
                         or isinstance(e, ConnectionClosedError):
                     changed = True

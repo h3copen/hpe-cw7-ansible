@@ -124,14 +124,14 @@ import os
 import re
 
 try:
-    HAS_PYHP = True
-    from pyhpecw7.comware import HPCOM7
-    from pyhpecw7.features.file_copy import FileCopy
-    from pyhpecw7.features.install_os import InstallOs
-    from pyhpecw7.features.reboot import Reboot
-    from pyhpecw7.errors import *
+    HAS_PYCW7 = True
+    from pycw7.comware import COM7
+    from pycw7.features.file_copy import FileCopy
+    from pycw7.features.install_os import InstallOs
+    from pycw7.features.reboot import Reboot
+    from pycw7.errors import *
 except ImportError as ie:
-    HAS_PYHP = False
+    HAS_PYCW7 = False
 
 
 def safe_fail(module, device=None, **kwargs):
@@ -169,8 +169,8 @@ def main():
         supports_check_mode=True
     )
 
-    if not HAS_PYHP:
-        safe_fail(module, msg='There was a problem loading from the pyhpecw7 '
+    if not HAS_PYCW7:
+        safe_fail(module, msg='There was a problem loading from the pycw7 '
                   + 'module.', error=str(ie))
 
     ipe_package = module.params.get('ipe_package')
@@ -191,7 +191,7 @@ def main():
     password = module.params['password']
     port = module.params['port']
 
-    device = HPCOM7(host=hostname, username=username,
+    device = COM7(host=hostname, username=username,
                     password=password, port=port, timeout=1200)
 
     changed = False
@@ -211,7 +211,7 @@ def main():
     try:
         ios = InstallOs(device)
         existing = ios.get_config()
-    except PYHPError:
+    except PYCW7Error:
         safe_fail(module, device, msg=str(e),
                   descr='Error getting current config.')
 
@@ -233,7 +233,7 @@ def main():
         try:
             # preps transfer and checks if source file exists
             ipe_file_copy = FileCopy(device, ipe_package, ipe_dst)
-        except PYHPError as fe:
+        except PYCW7Error as fe:
             safe_fail(module, device, msg=str(fe),
                       descr='Error preparing IPE file transfer.')
 
@@ -241,7 +241,7 @@ def main():
             try:
                 ipe_file_copy.transfer_file(look_for_keys=look_for_keys)
                 transfered = True
-            except PYHPError as fe:
+            except PYCW7Error as fe:
                 safe_fail(module, device, msg=str(fe),
                           descr='Error transfering IPE file.')
 
@@ -260,7 +260,7 @@ def main():
         try:
             # preps transfer and checks if source file exists
             boot_file_copy = FileCopy(device, boot, boot_dst)
-        except PYHPError as fe:
+        except PYCW7Error as fe:
             safe_fail(module, device, msg=str(fe),
                       descr='Error preparing boot file transfer.')
 
@@ -268,7 +268,7 @@ def main():
         try:
             # preps transfer and checks if source file exists
             system_file_copy = FileCopy(device, system, system_dst)
-        except PYHPError as fe:
+        except PYCW7Error as fe:
             safe_fail(module, device, msg=str(fe),
                       descr='Error preparing system file transfer.')
 
@@ -276,7 +276,7 @@ def main():
             try:
                 boot_file_copy.transfer_file(look_for_keys=look_for_keys)
                 transfered = True
-            except PYHPError as fe:
+            except PYCW7Error as fe:
                 safe_fail(module, device, msg=str(fe),
                           descr='Error transfering boot file.')
 
@@ -284,7 +284,7 @@ def main():
             try:
                 system_file_copy.transfer_file(look_for_keys=look_for_keys)
                 transfered = True
-            except PYHPError as fe:
+            except PYCW7Error as fe:
                 safe_fail(module, device, msg=str(fe),
                           descr='Error transfering system file.')
 
@@ -312,7 +312,7 @@ def main():
             try:
                 device.execute_staged()
                 end_state = ios.get_config()
-            except PYHPError as e:
+            except PYCW7Error as e:
                 safe_fail(module, device, msg=str(e),
                           descr='Error executing commands.')
             changed = True
@@ -333,9 +333,9 @@ def main():
             # this is needed to activate the reboot
             try:
                 device.close()
-            except PYHPError:
+            except PYCW7Error:
                 pass
-        except PYHPError as e:
+        except PYCW7Error as e:
             safe_fail(module, device, msg=str(e),
                       descr='Error rebooting the device.')
 

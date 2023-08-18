@@ -14,7 +14,7 @@ Synopsis
 
 Added in version 1.0
 
-Enable or Disable global LLDP on a HP Comware 7 deviceauthor: gongqianyu
+Enable or Disable global LLDP on a Comware 7 deviceauthor: gongqianyu
 
 Options
 -------

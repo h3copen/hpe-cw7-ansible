@@ -77,13 +77,13 @@ EXAMPLE = """
 import socket
 
 try:
-    HAS_PYHP = True
-    from pyhpecw7.comware import HPCOM7
-    from pyhpecw7.features.radius import Radius
-    from pyhpecw7.features.errors import InterfaceError
-    from pyhpecw7.errors import *
+    HAS_PYCW7 = True
+    from pycw7.comware import COM7
+    from pycw7.features.radius import Radius
+    from pycw7.features.errors import InterfaceError
+    from pycw7.errors import *
 except ImportError as ie:
-    HAS_PYHP = False
+    HAS_PYCW7 = False
 
 
 def safe_fail(module, device=None, **kwargs):
@@ -111,8 +111,8 @@ def main():
         supports_check_mode=True
     )
 
-    if not HAS_PYHP:
-        safe_fail(module, msg='There was a problem loading from the pyhpecw7 '
+    if not HAS_PYCW7:
+        safe_fail(module, msg='There was a problem loading from the pycw7 '
                   + 'module.', error=str(ie))
 
     filtered_keys = ('state', 'hostname', 'username', 'password',
@@ -122,7 +122,7 @@ def main():
     username = module.params['username']
     password = module.params['password']
     port = module.params['port']
-    device = HPCOM7(host=hostname, username=username,
+    device = COM7(host=hostname, username=username,
                     password=password, port=port)
     state = module.params['state']
     radius_scheme = module.params['radius_scheme']
@@ -139,13 +139,13 @@ def main():
 
     try:
         radius = Radius(device,radius_scheme)
-    except PYHPError as e:
+    except PYCW7Error as e:
         safe_fail(module,device,descr='there is problem in setting localuser',
                   msg=str(e))
     try:
         existing = radius.get_config()
         existing_radius = radius.get_radius_info()
-    except PYHPError as e:
+    except PYCW7Error as e:
         safe_fail(module, device, msg=str(e),
                   descr='Error getting existing config.')
 
@@ -172,7 +172,7 @@ def main():
             try:
                 device.execute_staged()
                 end_state = radius.get_config()
-            except PYHPError as e:
+            except PYCW7Error as e:
                 safe_fail(module, device, msg=str(e),
                           descr='Error on device execution.')
             changed = True

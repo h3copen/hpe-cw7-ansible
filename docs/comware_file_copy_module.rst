@@ -110,11 +110,11 @@ Examples
     - comware_file_copy: file=/usr/smallfile remote_path=flash:/otherfile 
       username={{ username }} password={{ password }} hostname={{ inventory_hostname }}
       
-    - comware_file_copy: file=/root/ansible-hpe-cw7-master/hp-vlans.yml remote_path=flash:/ldx/hp-vlans.yml 
+    - comware_file_copy: file=/root/pycw7-master/vlans.yml remote_path=flash:/ldx/vlans.yml 
       ftpupload=true username={{ username }} password={{ password }}   hostname={{ inventory_hostname }}
       
     # name: use FTP to download files to the server--module 1.3
-      comware_file_copy: file=/root/ansible-hpe-cw7-master/11.txt remote_path=flash:/llld/11.txt ftpdownload=true username={{ username }} password={{ password }}   hostname={{ inventory_hostname }}
+      comware_file_copy: file=/root/pycw7-master/11.txt remote_path=flash:/llld/11.txt ftpdownload=true username={{ username }} password={{ password }}   hostname={{ inventory_hostname }}
 
     
 

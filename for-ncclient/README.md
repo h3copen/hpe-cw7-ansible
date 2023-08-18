@@ -1,4 +1,4 @@
-# hpe-cw7-ansible
+# pycw7-ansible
 ## for-ncclient
 1. rpc.py
 The rpc.py is used to replace the corresponding file in ncclient.

@@ -97,19 +97,19 @@ EXAMPLES = '''
 
 # files compared
 - comware_rollback: filename=123.cfg comparefile=test.cfg username={{ username }} password={{ password }} hostname={{ inventory_hostname }}
-  diff_file='/root/ansible-hpe-cw7-master/diffs.diff'
+  diff_file='/root/pycw7-ansible-master/diffs.diff'
 '''
 
 import socket
 import os
 
 try:
-    HAS_PYHP = True
-    from pyhpecw7.comware import HPCOM7
-    from pyhpecw7.features.errors import *
-    from pyhpecw7.features.file import File
+    HAS_PYCW7 = True
+    from pycw7.comware import COM7
+    from pycw7.features.errors import *
+    from pycw7.features.file import File
 except ImportError as ie:
-    HAS_PYHP = False
+    HAS_PYCW7 = False
 
 
 def safe_fail(module, device=None, **kwargs):
@@ -162,8 +162,8 @@ def main():
         ),
         supports_check_mode=True
     )
-    if not HAS_PYHP:
-        module.fail_json(msg='There was a problem loading from the pyhpecw7 '
+    if not HAS_PYCW7:
+        module.fail_json(msg='There was a problem loading from the pycw7 '
                              + 'module.', error=str(ie))
 
     username = module.params['username']
@@ -174,7 +174,7 @@ def main():
     device_args = dict(host=hostname, username=username,
                        password=password, port=port)
 
-    device = HPCOM7(**device_args)
+    device = COM7(**device_args)
 
     filename = module.params['filename']
     comparefile = module.params['comparefile']
@@ -231,7 +231,7 @@ def main():
         else:
             try:
                 device.execute_staged()
-            except PYHPError as e:
+            except PYCW7Error as e:
                 safe_fail(module, device, msg=str(e),
                           descr='error during execution')
             changed = True

@@ -117,7 +117,7 @@ Examples
     
     # files compared
     - comware_rollback: filename=123.cfg comparefile=test.cfg username={{ username }} password={{ password }} hostname={{ inventory_hostname }}
-      diff_file='/root/ansible-hpe-cw7-master/diffs.diff'
+      diff_file='/root/pycw7-master/diffs.diff'
 
     
 

@@ -1,13 +1,13 @@
 ---
 
-  - name: HP Comware command
-    hosts: hp1
+  - name: Comware command
+    hosts: test1
     gather_facts: no
     connection: local
 
     vars:
-      username: hp
-      password: hp123
+      username: test
+      password: test123
 
     tasks:
 

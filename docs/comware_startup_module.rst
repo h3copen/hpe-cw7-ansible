@@ -152,7 +152,7 @@ Examples
         username={{ username }} password={{ password }} hostname={{ inventory_hostname }} 
           
     #Show content for the existing config file
-      comware_startup: filename='flash:/123.cfg' show_file='/root/ansible-hpe-cw7-master/123.cfg' username={{ username }} password={{ password }} hostname={{ inventory_hostname }}
+      comware_startup: filename='flash:/123.cfg' show_file='/root/pycw7-master/123.cfg' username={{ username }} password={{ password }} hostname={{ inventory_hostname }}
 
     
 

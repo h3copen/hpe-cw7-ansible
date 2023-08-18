@@ -110,14 +110,14 @@ EXAMPLES = """
 
 import socket
 try:
-    HAS_PYHP = True
-    from pyhpecw7.features.vxlan import Vxlan, Tunnel
-    from pyhpecw7.features.l2vpn import L2VPN
-    from pyhpecw7.comware import HPCOM7
-    from pyhpecw7.features.errors import *
-    from pyhpecw7.errors import *
+    HAS_PYCW7 = True
+    from pycw7.features.vxlan import Vxlan, Tunnel
+    from pycw7.features.l2vpn import L2VPN
+    from pycw7.comware import COM7
+    from pycw7.features.errors import *
+    from pycw7.errors import *
 except ImportError as ie:
-    HAS_PYHP = False
+    HAS_PYCW7 = False
 
 
 def safe_fail(module, device=None, **kwargs):
@@ -164,8 +164,8 @@ def main():
         ),
         supports_check_mode=True
     )
-    if not HAS_PYHP:
-        module.fail_json(msg='There was a problem loading from the pyhpecw7 '
+    if not HAS_PYCW7:
+        module.fail_json(msg='There was a problem loading from the pycw7 '
                          + 'module.', error=str(ie))
 
     username = module.params['username']
@@ -176,7 +176,7 @@ def main():
     device_args = dict(host=hostname, username=username,
                        password=password, port=port)
 
-    device = HPCOM7(**device_args)
+    device = COM7(**device_args)
 
     vxlan = module.params['vxlan']
     vsi = module.params['vsi']
@@ -197,7 +197,7 @@ def main():
     try:
         l2vpn = L2VPN(device)
         is_l2vpn_enabled = l2vpn.get_config()
-    except PYHPError as e:
+    except PYCW7Error as e:
         safe_fail(module, device, msg=str(e), descr='L2VPN check failed')
 
     if is_l2vpn_enabled == 'disabled':
@@ -206,7 +206,7 @@ def main():
     try:
         VXLAN = Vxlan(device, vxlan, vsi)
         existing = VXLAN.get_config()
-    except PYHPError as e:
+    except PYCW7Error as e:
         safe_fail(module, device, msg=str(e), descr='could not obtain existing')
 
     if state == 'present':
@@ -262,7 +262,7 @@ def main():
             try:
                 device.execute_staged()
                 end_state = VXLAN.get_config()
-            except PYHPError as e:
+            except PYCW7Error as e:
                 safe_fail(module, device, msg=str(e),
                           descr='failed during execution')
             changed = True

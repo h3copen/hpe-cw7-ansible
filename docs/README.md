@@ -1,5 +1,5 @@
-# HPE Networking Comware 7 Ansible Docs
-### *Network Automation with HPE and Ansible*
+# H3C Networking Comware 7 Ansible Docs
+### *Network Automation with H3C and Ansible*
 
 ---
 ### Requirements
