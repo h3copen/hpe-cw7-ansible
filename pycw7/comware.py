@@ -371,7 +371,15 @@ class COM7(object):
             raw text CLI output
 
         """
-        rsp = self.execute(self.connection.cli_display, [command])
+        if isinstance(command, list):
+            command = '\n'.join(command)
+        elif isinstance(command, str) or isinstance(command, unicode):
+            command = command
+
+        CLI = etree.Element("CLI")
+        Execution = etree.SubElement(CLI, "Execution")
+        Execution.text = command
+        rsp = self.execute(self.connection.dispatch, [CLI])
         text = self._find_between(rsp.xml, 'CDATA[', ']]')
         text = self._strip_return(text)
 
@@ -387,7 +395,15 @@ class COM7(object):
             raw text CLI output
 
         """
-        rsp = self.execute(self.connection.cli_config, [command])
+        if isinstance(command, list):
+            command = '\n'.join(command)
+        elif isinstance(command, str) or isinstance(command, unicode):
+            command = command
+
+        CLI = etree.Element("CLI")
+        Configuration = etree.SubElement(CLI, "Configuration")
+        Configuration.text = command
+        rsp = self.execute(self.connection.dispatch, [CLI])
         xml = bytes(bytearray(rsp.xml, encoding='utf-8'))
         xml_obj = etree.fromstring(xml)
         return self._extract_config(xml_obj)
