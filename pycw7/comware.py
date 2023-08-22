@@ -414,8 +414,10 @@ class COM7(object):
         """
         try:
             self.connection.async_mode = True
-            self.connection.cli_display(['reboot force'])
+            self.cli_display(['reboot force'])
         except NCTimeoutError:
+            pass
+        except AttributeError:
             pass
         finally:
             self.connection.async_mode = False
