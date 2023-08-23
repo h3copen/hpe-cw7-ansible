@@ -266,19 +266,19 @@ def main():
                         interface.default(stage=True)
                     except InterfaceError as e:
                         safe_fail(module, device, msg=str(e),
-                                  descr='Error getting default configuration.')
+                                descr='Error getting default configuration.')
             elif len(subnum_list) == 2:
                 try:
                     interface.remove_sub_iface(stage=True)
                 except InterfaceError as e:
                     safe_fail(module, device, msg=str(e),
-                              descr='Error removing routing sub interface.')
-        else:
-            try:
-                interface.remove_logical(stage=True)
-            except InterfaceError as e:
-                safe_fail(module, device, msg=str(e),
-                          descr='Error removing logical interface.')
+                            descr='Error removing routing sub interface.')
+            else:
+                try:
+                    interface.remove_logical(stage=True)
+                except InterfaceError as e:
+                    safe_fail(module, device, msg=str(e),
+                            descr='Error removing logical interface.')
 
     commands = None
     end_state = existing

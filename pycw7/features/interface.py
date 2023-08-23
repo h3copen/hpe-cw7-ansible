@@ -269,7 +269,7 @@ class Interface(object):
             defaults['duplex'] = 'auto'
             defaults['type'] = 'routed'
         elif self.iface_type == 'Bridge-Aggregation':
-            defaults['type'] = 'bridged'
+            pass
         elif self.iface_type == 'Vlan-interface':
             pass
         elif self.iface_type == 'LoopBack':
