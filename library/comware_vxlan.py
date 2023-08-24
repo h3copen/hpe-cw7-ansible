@@ -92,10 +92,10 @@ options:
 EXAMPLES = """
 
 # ensure VXLAN and VSI do not exist
-- comware_vxlan: vxlan=100 vsi=VSI_VXLAN_100 tunnels=20 state=absent username={{ username }} password={{ password }} hostname={{ inventory_hostname }}
+- comware_vxlan: vxlan=100 vsi=VSI_VXLAN_100 tunnels=[20] state=absent username={{ username }} password={{ password }} hostname={{ inventory_hostname }}
 
 # ensure VXLAN 100 exists and is mapped to VSI VSI_VXLAN_100 with only tunnel interface 20
-- comware_vxlan: vxlan=100 vsi=VSI_VXLAN_100 tunnels=20 username={{ username }} password={{ password }} hostname={{ inventory_hostname }}
+- comware_vxlan: vxlan=100 vsi=VSI_VXLAN_100 tunnels=[20] username={{ username }} password={{ password }} hostname={{ inventory_hostname }}
 
 # ensure 3 tunnels mapped to the vxlan
 - comware_vxlan:
@@ -153,7 +153,7 @@ def main():
         argument_spec=dict(
             vxlan=dict(required=True, type='str'),
             vsi=dict(required=True, type='str'),
-            tunnels=dict(required=False),
+            tunnels=dict(required=False, type='list'),
             descr=dict(required=False),
             state=dict(choices=['present', 'absent'], default='present'),
             port=dict(default=830, type='int'),
