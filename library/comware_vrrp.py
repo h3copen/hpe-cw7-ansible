@@ -313,8 +313,6 @@ def main():
         if existing.get('admin') == 'Up':
             vrrp.shutdown(stage=True)
     elif state == 'undoshutdown':
-        print(existing)
-        raise IOError
         if existing.get('admin') == 'Down':
             vrrp.undoshutdown(stage=True)
 
