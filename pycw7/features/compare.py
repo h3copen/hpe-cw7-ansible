@@ -12,6 +12,8 @@ class Compare(object):
     Args:
         device (COM7): connected instance of a ``pycw7.comware.COM7``
             object.
+        cmd: command to excute
+        result: result file path
 
     Attributes:
         device (COM7): connected instance of a ``pycw7.comware.COM7``
@@ -26,34 +28,22 @@ class Compare(object):
             self.result=result
 
     def get_result(self):
-        Result = self.result
-
         commands = '{0}'.format(self.cmd)
         res = self.device.cli_display(commands)
         ele = res.split('\n')
         element = ele[1:-1]
 
-
-        with open('/root/pycw7-ansible-master/gqy/gqy.txt', 'w+') as f:
-            for i in enumerate (element):
-                if i[0] != len(element)-1:
-                    f.write(i[1].lstrip() + '\n')
-                else:
-                    f.write(i[1].strip())
-
-
         alist = []
         blist = []
 
-        for line in open(Result):
-            alist.append(line)
-        for line in open('/root/pycw7-ansible-master/gqy/gqy.txt'):
-            blist.append(line)
-
-        # print("a have  b not have")
-        # print(set(alist).difference(set(blist)))
-        # print("b have  a not have")
-        # print(set(blist).difference(set(alist)))
+        for line in element:
+            line = line.rstrip()
+            if line:
+                alist.append(line)
+        for line in open(self.result, 'r'):
+            line = line.rstrip()
+            if line:
+                blist.append(line)
         if set(alist) == set(blist):
             return True
         else:
