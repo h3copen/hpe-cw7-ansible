@@ -1,0 +1,15 @@
+---
+
+  - name: Comware local_user
+    hosts: test1 test2
+    gather_facts: no
+    connection: local
+
+    vars:
+      username: test
+      password: admin123456
+
+    tasks:
+      # Basic Ethernet config
+      #- Before using ftp_dir , ensure it already exist in the device.   e.g. flash:/
+      - comware_local_user: localusername=test server_ftp=True local_user_level=15 username={{ username }} password={{ password }} hostname={{ inventory_hostname }}

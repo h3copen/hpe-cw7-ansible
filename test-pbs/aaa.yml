@@ -1,0 +1,19 @@
+---
+
+  - name: Comware aaa
+    hosts: test1 test2
+    gather_facts: no
+    connection: local
+
+    vars:
+      username: test
+      password: admin123456
+
+    tasks:
+    
+      # Basic Ethernet config
+      - name:  create domain myserver and config it
+        comware_aaa: domain_name=myserver aaa_type=authentication access_type=login scheme_list=radius \
+            scheme_name_list=test username={{ username }} password={{ password }} hostname={{ inventory_hostname }}
+      - name:  delete domain name myserver relates
+        comware_aaa: domain_name=myserver state=default username={{ username }} password={{ password }} hostname={{ inventory_hostname }}

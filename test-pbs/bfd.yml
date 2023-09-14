@@ -1,0 +1,16 @@
+---
+
+  - name: Comware bfd
+    hosts: test1 test2
+    gather_facts: no
+    connection: local
+
+    vars:
+      username: test
+      password: admin123456
+
+    tasks:
+     - name: config bfd 
+       comware_bfd: damp_max_wait_time=100 damp_init_wait_time=10 secondary=8 username={{username}} password={{password}} hostname={{inventory_hostname}}
+     - name: delete bfd related
+       comware_bfd: damp_max_wait_time=100 damp_init_wait_time=10 secondary=8 state=default username={{username}} password={{password}} hostname={{inventory_hostname}}

@@ -1,0 +1,14 @@
+---
+
+  - name: Comware hwtacacs
+    hosts: test1 test2
+    gather_facts: no
+    connection: local
+
+    vars:
+      username: test
+      password: admin123456
+
+    tasks:
+    # config hwtacacs scheme
+      - comware_hwtacacs: hwtacacs_scheme_name=test priority=primary auth_host_ip=192.168.1.186 auth_host_port=48 username={{ username }} password={{ password }} hostname={{ inventory_hostname }}

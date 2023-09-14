@@ -1,0 +1,28 @@
+---
+
+  - name: Comware stp
+    hosts: test1
+    gather_facts: no
+    connection: local
+
+    vars:
+      username: test
+      password: admin123456
+
+    tasks:
+      # Basic stp config
+      - comware_stp: bpdu=true mode=MSTP tc=true username={{ username }} password={{ password }} hostname={{ inventory_hostname }}
+      # delete Basic stp config
+      - comware_stp: bpdu=true mode=MSTP tc=true state=absent username={{ username }} password={{ password }} hostname={{ inventory_hostname }}
+      # Basic stp config
+      - comware_stp: bpdu=true mode=STP tc=true username={{ username }} password={{ password }} hostname={{ inventory_hostname }}
+      # delete Basic stp config
+      - comware_stp: bpdu=true mode=STP tc=true state=absent username={{ username }} password={{ password }} hostname={{ inventory_hostname }}
+      # Basic stp config
+      - comware_stp: bpdu=true mode=PVST tc=true username={{ username }} password={{ password }} hostname={{ inventory_hostname }}
+      # delete Basic stp config
+      - comware_stp: bpdu=true mode=PVST tc=true state=absent username={{ username }} password={{ password }} hostname={{ inventory_hostname }}
+      # Basic stp config
+      - comware_stp: bpdu=true mode=RSTP tc=true username={{ username }} password={{ password }} hostname={{ inventory_hostname }}
+      # delete Basic stp config
+      - comware_stp: bpdu=true mode=RSTP tc=true state=absent username={{ username }} password={{ password }} hostname={{ inventory_hostname }}

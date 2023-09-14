@@ -1,0 +1,16 @@
+---
+
+  - name: Comware tele_stream
+    hosts: test1
+    gather_facts: no
+    connection: local
+
+    vars:
+      username: test
+      password: admin123456
+
+    tasks:
+      # telemetry config
+      - comware_tele_stream: glo_enable=enable timestamp=enable deviceID=10.10.10.1 username={{ username }} password={{ password }} hostname={{ inventory_hostname }} state=present
+      # remove telemetry 
+      - comware_tele_stream: glo_enable=enable timestamp=enable deviceID=10.10.10.1 username={{ username }} password={{ password }} hostname={{ inventory_hostname }} state=default

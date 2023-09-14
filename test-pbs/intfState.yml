@@ -1,0 +1,14 @@
+---
+
+  - name: Comware intfState
+    hosts: test2
+    gather_facts: no
+    connection: local
+
+    vars:
+      username: test
+      password: admin123456
+
+    tasks:
+      - name: Check the port status
+        comware_intfState: username={{ username }} password={{ password }} hostname={{ inventory_hostname }}

@@ -1,0 +1,35 @@
+---
+
+  - name: Comware syslog_global
+    hosts: test1 test2
+    gather_facts: no
+    connection: local
+
+    vars:
+      username: test
+      password: admin123456
+
+    tasks:
+     # timestamps and level config
+      - comware_syslog_global: timestamps=boot  level=debugging username={{ username }} password={{ password }} hostname={{ inventory_hostname }}
+    
+      # Restore timestamps and level to default state    
+      - comware_syslog_global: timestamps=boot level=debugging username={{ username }} password={{ password }} hostname={{ inventory_hostname }} state=absent
+      
+      # timestamps and level config
+      - comware_syslog_global: timestamps=boot  level=alert username={{ username }} password={{ password }} hostname={{ inventory_hostname }}
+    
+      # Restore timestamps and level to default state    
+      - comware_syslog_global: timestamps=boot level=alert username={{ username }} password={{ password }} hostname={{ inventory_hostname }} state=absent
+      
+      # timestamps and level config
+      - comware_syslog_global: timestamps=boot  level=critical username={{ username }} password={{ password }} hostname={{ inventory_hostname }}
+    
+      # Restore timestamps and level to default state    
+      - comware_syslog_global: timestamps=boot level=critical username={{ username }} password={{ password }} hostname={{ inventory_hostname }} state=absent
+      
+      # timestamps and level config
+      - comware_syslog_global: timestamps=date  level=emergency username={{ username }} password={{ password }} hostname={{ inventory_hostname }}
+    
+      # Restore timestamps and level to default state    
+      - comware_syslog_global: timestamps=date level=emergency username={{ username }} password={{ password }} hostname={{ inventory_hostname }} state=absent

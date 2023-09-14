@@ -1,0 +1,20 @@
+---
+
+  - name: Comware patch
+    hosts: test2
+    gather_facts: no
+    connection: local
+
+    vars:
+      username: test
+      password: admin123456
+
+    tasks:
+       - name: copy version from ansible server into switch.
+         comware_file_copy: file=/root/pycw7-ansible-master/gqy/s6820-cmw710-system-weak-patch-f6205p05h16.bin remote_path=flash:/s6820-cmw710-system-weak-patch-f6205p05h16.bin username={{ username }} password={{ password }} hostname={{ inventory_hostname }}
+  
+       - name: check bin is exit or not and active it.
+          comware_patch: patchname=patch.bin activate=true username={{ username }} password={{ password }} hostname={{ inventory_hostname }} async=60 poll=0
+  
+       - name: check patch is active or not 
+          comware_patch: patchname=s6805-cmw710-boot-r6607.bin check_result=true username={{ username }} password={{ password }} hostname={{ inventory_hostname }}

@@ -1,0 +1,24 @@
+---
+
+  - name: Comware rollback
+    hosts: test2
+    gather_facts: no
+    connection: local
+
+    vars:
+      username: test
+      password: admin123456
+
+    tasks:
+      # rollback config to myfile.cfg (in flash)
+      - comware_rollback: filename=myfile.cfg username={{ username }} password={{ password }} hostname={{ inventory_hostname }}
+      
+      # rollback config to startup.cfg (in flash)
+      - comware_rollback: username={{ username }} password={{ password }} hostname={{ inventory_hostname }}
+      
+      # delete rollback point 123.cfg (in flash)
+      - comware_rollback: filename=123.cfg clean=true username={{ username }} password={{ password }} hostname={{ inventory_hostname }}
+      
+      # files compared
+      - comware_rollback: filename=123.cfg comparefile=test.cfg username={{ username }} password={{ password }} hostname={{ inventory_hostname }}
+        diff_file='/root/pycw7-ansible-master/diffs.diff'

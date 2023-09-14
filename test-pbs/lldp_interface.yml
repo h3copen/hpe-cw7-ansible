@@ -1,0 +1,16 @@
+---
+
+  - name: Comware lldp_interface
+    hosts: test1
+    gather_facts: no
+    connection: local
+
+    vars:
+      username: test
+      password: admin123456
+
+    tasks:
+    # Basic interface lldp config
+      - comware_lldp_interface: name=GigabitEthernet1/0/12 interface_enable=enabled username={{ username }} password={{ password }} hostname={{ inventory_hostname }}
+# Basic interface lldp delete
+      - comware_lldp_interface: name=GigabitEthernet1/0/12 interface_enable=disabled username={{ username }} password={{ password }} hostname={{ inventory_hostname }}

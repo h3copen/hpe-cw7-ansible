@@ -1,0 +1,20 @@
+---
+
+  - name: Comware iface_stp
+    hosts: test2
+    gather_facts: no
+    connection: local
+
+    vars:
+      username: test
+      password: admin123456
+
+    tasks:
+    # Basic interface stp config
+      - comware_iface_stp: name=Ten-GigabitEthernet2/0/24 tc_restriction=true transimit_limit=200 username={{ username }} password={{ password }} hostname={{ inventory_hostname }}
+
+# Delete interface stp config
+      - comware_iface_stp: name=Ten-GigabitEthernet2/0/24  state=default username={{ username }} password={{ password }} hostname={{ inventory_hostname }}
+
+# Interface stp full configuration
+      - comware_iface_stp: name=Ten-GigabitEthernet2/0/25 edgedport=true root=true tc_restriction=true transimit_limit=200   username={{ username }} password={{ password }} hostname={{ inventory_hostname }}

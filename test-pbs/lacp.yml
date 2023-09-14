@@ -1,0 +1,16 @@
+---
+
+  - name: Comware lacp
+    hosts: test1 test2
+    gather_facts: no
+    connection: local
+
+    vars:
+      username: test
+      password: admin123456
+
+    tasks:
+      # lacp config
+      - comware_lacp: priorityID=8 sysmac=2-2-2 username={{ username }} password={{ password }} hostname={{ inventory_hostname }} state=present
+      # delete lacp 
+      - comware_lacp: priorityID=8 sysmac=2-2-2 username={{ username }} password={{ password }} hostname={{ inventory_hostname }}

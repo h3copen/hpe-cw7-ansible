@@ -1,0 +1,19 @@
+---
+
+  - name: Comware netconf
+    hosts: test1
+    gather_facts: no
+    connection: local
+
+    vars:
+      username: test
+      password: admin123456
+
+    tasks:
+        # netconf config
+      - comware_netconf: source=all operation=protocol-operation opera_type=action username={{ username }} password={{ password }} hostname={{ inventory_hostname }}
+    
+      # detele netconf config    
+      - comware_netconf: source=all operation=protocol-operation opera_type=action username={{ username }} password={{ password }} hostname={{ inventory_hostname }} state=absent
+    
+      - comware_netconf: soap=http ssh=enable username={{ username }} password={{ password }} hostname={{ inventory_hostname }}

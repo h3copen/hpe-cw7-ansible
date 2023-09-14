@@ -1,0 +1,16 @@
+---
+
+  - name: Comware bgp_af
+    hosts: test1 test2
+    gather_facts: no
+    connection: local
+
+    vars:
+      username: test
+      password: admin123456
+
+    tasks:
+       - name: Configue bgp ipv4 address family
+         comware_bgp_af: bgp_as=10 bgp_instance=test address_familys=ipv4 local_pref=20 frr_policy=true username={{ username }} password={{ password }} hostname={{ inventory_hostname }}
+       - name: Configue bgp vpnv4 address family
+         comware_bgp_af: bgp_as=10 bgp_instance=test address_familys=vpnv4 route_select_delay=20 username={{ username }} password={{ password }} hostname={{ inventory_hostname }}  

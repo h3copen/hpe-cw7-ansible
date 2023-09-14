@@ -1,0 +1,16 @@
+---
+
+  - name: Comware teleFlowGroup_global
+    hosts: test1 test2
+    gather_facts: no
+    connection: local
+
+    vars:
+      username: test
+      password: admin123456
+
+    tasks:
+      # telemetry Flow Group aging time config
+      - comware_teleFlowGroup_global: agtime=20 username={{ username }} password={{ password }} hostname={{ inventory_hostname }}
+      # config aging time into default state      
+      - comware_teleFlowGroup_global: agtime=20 state=default username={{ username }} password={{ password }} hostname={{ inventory_hostname }}

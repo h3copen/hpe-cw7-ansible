@@ -1,0 +1,15 @@
+---
+
+  - name: Comware ospf
+    hosts: test1
+    gather_facts: no
+    connection: local
+
+    vars:
+      username: test
+      password: admin123456
+
+    tasks:
+      # Basic Ethernet config
+      - comware_ospf: ospfname=4 area=2.2.2.2 areatype=NSSA lsa_generation_max=20 lsa_generation_min=20 lsa_generation_inc=20 username={{ username }} password={{ password }} hostname={{ inventory_hostname }}
+      - comware_ospf: ospfname=5 area=2.2.2.2 areatype=Stub lsa_generation_max=20 lsa_generation_min=20 lsa_generation_inc=20 username={{ username }} password={{ password }} hostname={{ inventory_hostname }}

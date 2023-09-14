@@ -1,0 +1,11 @@
+[all:vars]
+username=test
+password=admin123456
+ansible_python_interpreter=/usr/bin/python3
+[switches]
+test1
+test2
+test3
+
+
+

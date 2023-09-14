@@ -1,0 +1,24 @@
+---
+
+  - name: Comware bgp_group
+    hosts: test1 test2
+    gather_facts: no
+    connection: local
+
+    vars:
+      username: test
+      password: admin123456
+
+    tasks:
+      - name: config bgp and create group
+        comware_bgp_group: bgp_as=200 group=evpn  group_type=internal username={{ username }} password={{ password }} hostname={{ inventory_hostname }}
+      - name: config peer connet interface
+        comware_bgp_group: bgp_as=200 peer=evpn peer_connect_intf=LoopBack0 username={{ username }} password={{ password }} hostname={{ inventory_hostname }}
+      - name: join peer in the group
+        comware_bgp_group: bgp_as=200 peer=1.1.1.1 peer_in_group=evpn username={{ username }} password={{ password }} hostname={{ inventory_hostname }}
+      - name: join peer in the group
+        comware_bgp_group: bgp_as=200 peer=3.3.3.3 peer_in_group=evpn username={{ username }} password={{ password }} hostname={{ inventory_hostname }}
+      - name: create address-family view and config it
+        comware_bgp_group: bgp_as=200 address_family=l2vpn evpn=true policy_vpn_target=disable peer=evpn reflect_client=true  peer_group_state=true username={{ username }} password={{ password }} hostname={{ inventory_hostname }}
+      - name: remove bgp
+        comware_bgp_group: bgp_as=200 state=default username={{ username }} password={{ password }} hostname={{ inventory_hostname }}

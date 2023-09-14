@@ -1,0 +1,23 @@
+---
+
+  - name: Comware snmp_user
+    hosts: test1
+    gather_facts: no
+    connection: local
+
+    vars:
+      username: test
+      password: admin123456
+
+    tasks:
+      - name: Config SNMP v3 User
+        comware_snmp_user: state=present usm_user_name=gtest_w_ansbile sercurity_model=v3 user_group=gtest_w_ansbile auth_protocol=sha priv_protocol=3des auth_key=gtest_w_ansbile priv_key=gtest_w_ansbile username={{ username }} password={{ password }} hostname={{ inventory_hostname }}
+  
+      - name: undo SNMP v3 User
+        comware_snmp_user: state=absent usm_user_name=gtest_w_ansbile sercurity_model=v3 user_group=gtest_w_ansbile auth_protocol=sha priv_protocol=3des auth_key=gtest_w_ansbile priv_key=gtest_w_ansbile username={{ username }} password={{ password }} hostname={{ inventory_hostname }}
+      
+      - name: Config SNMP v2c User
+        comware_snmp_user: state=present usm_user_name=gtest_w_ansbile sercurity_model=v2c user_group=gtest_w_ansbile username={{ username }} password={{ password }} hostname={{ inventory_hostname }}
+      
+      - name: undo SNMP v2c User
+        comware_snmp_user: state=absent usm_user_name=gtest_w_ansbile sercurity_model=v2c user_group=gtest_w_ansbile username={{ username }} password={{ password }} hostname={{ inventory_hostname }}

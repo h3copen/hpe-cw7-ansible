@@ -1,0 +1,16 @@
+---
+
+  - name: Comware license
+    hosts: test1 test2
+    gather_facts: no
+    connection: local
+
+    vars:
+      username: test
+      password: admin123456
+
+    tasks:
+          # e.g.
+      - comware_license: license=210235A1U6H1840000012020012114082102563.ak slot=1 state=present username={{ username }} password={{ password }} hostname={{ inventory_hostname }}
+      # delete
+      - comware_license: license=210235A1U6H1840000012020012114082102563.ak slot=1 username={{ username }} password={{ password }} hostname={{ inventory_hostname }}

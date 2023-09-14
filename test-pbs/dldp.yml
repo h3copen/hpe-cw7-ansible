@@ -1,0 +1,18 @@
+---
+
+  - name: Comware dldp
+    hosts: test1 test2
+    gather_facts: no
+    connection: local
+
+    vars:
+      username: test
+      password: admin123456
+
+    tasks:
+      - name: config dldp
+        comware_dldp: global_enable=enable auth_mode=md5 shutdown_mode=auto pwd_mode=cipher pwd=123456 timeout=10 name=GigabitEthernet1/0/27 
+                      interface_enable=disable state=present username={{ username }} password={{ password }} hostname={{ inventory_hostname }}
+      - name: delete dldp configuration
+        comware_dldp: global_enable=enable auth_mode=md5 shutdown_mode=auto pwd_mode=cipher pwd=123456 timeout=10 name=GigabitEthernet1/0/27 
+                      interface_enable=disable state=absent username={{ username }} password={{ password }} hostname={{ inventory_hostname }}

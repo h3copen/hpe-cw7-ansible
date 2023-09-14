@@ -1,0 +1,14 @@
+---
+
+  - name: Comware ftp
+    hosts: test1 test2
+    gather_facts: no
+    connection: local
+
+    vars:
+      username: test
+      password: admin123456
+
+    tasks:
+    # Enabling FTP
+      - comware_ftp: state=enable username={{ username }} password={{ password }} hostname={{ inventory_hostname }}

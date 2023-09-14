@@ -1,0 +1,17 @@
+---
+
+  - name: Comware radius
+    hosts: test1
+    gather_facts: no
+    connection: local
+
+    vars:
+      username: test
+      password: admin123456
+
+    tasks:
+      # Basic radius config
+      - comware_radius: radius_scheme=test username={{ username }} password={{ password }} hostname={{ inventory_hostname }}
+      
+      # Delete radius config
+      - comware_radius: radius_scheme=test state=default username={{ username }} password={{ password }} hostname={{ inventory_hostname }}

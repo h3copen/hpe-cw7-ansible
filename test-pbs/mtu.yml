@@ -1,0 +1,14 @@
+---
+
+  - name: Comware mtu
+    hosts: test1 test2
+    gather_facts: no
+    connection: local
+
+    vars:
+      username: test
+      password: admin123456
+
+    tasks:
+      # Basic Ethernet config
+      - comware_mtu: name=Ten-GigabitEthernet2/0/7 jumboframe=1537 mtu=1600 username={{ username }} password={{ password }} hostname={{ inventory_hostname }}

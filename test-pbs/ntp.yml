@@ -1,0 +1,22 @@
+---
+
+  - name: Comware ntp
+    hosts: test1
+    gather_facts: no
+    connection: local
+
+    vars:
+      username: test
+      password: admin123456
+
+    tasks:
+      # configure NTP authentication 
+      - comware_ntp: service=ntp keyid=42 authmode=md5 authkey=anicekey reliable=true username={{ username }} password={{ password }} hostname={{ inventory_hostname }}
+      # configure NTP reference clock
+      - comware_ntp: stratum=2 username={{ username }} password={{ password }} hostname={{ inventory_hostname }}
+      # configure NTP client
+      - comware_ntp: service=ntp keyid=42 hostmode=client ipadd=10.1.1.1 name=GigabitEthernet1/0/7 username={{ username }} password={{ password }} hostname={{ inventory_hostname }}
+      # delete trusted keys alone
+      - comware_ntp: state=absent del_rel_alone=true service=ntp keyid=42 reliable=false  username={{ username }} password={{ password }} hostname={{ inventory_hostname }}
+      # delete all verfication keys
+      - comware_ntp: state=absent service=ntp keyid=42 del_auth_all=true  username={{ username }} password={{ password }} hostname={{ inventory_hostname }}

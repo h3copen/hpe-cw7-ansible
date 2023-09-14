@@ -1,0 +1,17 @@
+---
+
+  - name: Comware loghost
+    hosts: test1 test2
+    gather_facts: no
+    connection: local
+
+    vars:
+      username: test
+      password: admin123456
+
+    tasks:
+      # basic config
+      - comware_loghost: loghost=3.3.3.7 VRF=vpn2 hostport=512 facility=128 sourceID=LoopBack0 username={{ username }} password={{ password }} hostname={{ inventory_hostname }}
+      
+      # delete config
+      - comware_loghost: loghost=3.3.3.7 VRF=vpn2 hostport=512 facility=128 sourceID=LoopBack0 state=absent username={{ username }} password={{ password }} hostname={{ inventory_hostname }}

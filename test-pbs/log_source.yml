@@ -1,0 +1,30 @@
+---
+
+  - name: Comware log_source
+    hosts: test1 test2
+    gather_facts: no
+    connection: local
+
+    vars:
+      username: test
+      password: admin123456
+
+    tasks:
+      # basic config
+      - comware_log_source: channelID=1 channelName=ARP level=critical username={{ username }} password={{ password }} hostname={{ inventory_hostname }}
+      
+      # delete config
+      - comware_log_source: channelID=1 channelName=ARP level=critical state=absent username={{ username }} password={{ password }} hostname={{ inventory_hostname }}
+      # basic config
+      - comware_log_source: channelID=2 channelName=ARP level=critical username={{ username }} password={{ password }} hostname={{ inventory_hostname }}
+      
+      # delete config
+      - comware_log_source: channelID=2 channelName=ARP level=critical state=absent username={{ username }} password={{ password }} hostname={{ inventory_hostname }}
+      - comware_log_source: channelID=3 channelName=ARP level=critical username={{ username }} password={{ password }} hostname={{ inventory_hostname }}
+      
+      # delete config
+      - comware_log_source: channelID=3 channelName=ARP level=critical state=absent username={{ username }} password={{ password }} hostname={{ inventory_hostname }}
+      - comware_log_source: channelID=4 channelName=ARP level=critical username={{ username }} password={{ password }} hostname={{ inventory_hostname }}
+      
+      # delete config
+      - comware_log_source: channelID=4 channelName=ARP level=critical state=absent username={{ username }} password={{ password }} hostname={{ inventory_hostname }}

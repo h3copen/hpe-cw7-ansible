@@ -1,0 +1,23 @@
+---
+
+  - name: Comware startup
+    hosts: test2
+    gather_facts: no
+    connection: local
+
+    vars:
+      username: test
+      password: admin123456
+
+    tasks:
+      #Basic Install OS Bootsys
+      - comware_startup: boot='flash:/s9850_6850-cmw710-boot-r6555p01.bin' system='flash:/s9850_6850-cmw710-system-r6555p01.bin' patch='flash:/s9850_6850-cmw710-system-patch-r6555p01h31.bin' username={{ username }} password={{ password }} hostname={{ inventory_hostname }}
+            
+      #Basic Install OS IPE
+      - comware_startup: ipe_package='flash:/s9850-h3c.ipe' username={{ username }} password={{ password }} hostname={{ inventory_hostname }}
+               
+      #Config next startup file
+      - comware_startup: nextstartupfile='flash:/123.cfg' username={{ username }} password={{ password }} hostname={{ inventory_hostname }} 
+            
+      #Show content for the existing config file
+      - comware_startup: filename='flash:/123.cfg' show_file='/root/pycw7-ansible-master/123.cfg' username={{ username }} password={{ password }} hostname={{ inventory_hostname }}

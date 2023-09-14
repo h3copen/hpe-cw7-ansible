@@ -1,0 +1,16 @@
+---
+
+  - name: Comware ospf_intf
+    hosts: test1
+    gather_facts: no
+    connection: local
+
+    vars:
+      username: test
+      password: admin123456
+
+    tasks:
+      # Basic Ethernet config ensure name (interface name) exists in device and the interface support ospf setting.
+      - comware_ospf_intf: name=GigabitEthernet1/0/7 ospfname=1 area=0 ospfcost=10 network_type=p2p keyid=11 md5type=md5 md5pwdtype=plain md5pwd=1 username={{ username }} password={{ password }} hostname={{ inventory_hostname }}
+        
+      - comware_ospf_intf: name=GigabitEthernet1/0/7 state=default username={{ username }} password={{ password }} hostname={{ inventory_hostname }}
