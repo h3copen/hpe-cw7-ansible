@@ -130,7 +130,6 @@ def main():
             operation=dict(required=False, choices=['protocol-operation', 'row-operation', 'verbose']),
             opera_type = dict(required=False, choices=['all', 'action', 'config', 'get', 'session', 'set', 'syntax', 'others']),
             soap = dict(required=False, choices=['http', 'https']),
-            ssh = dict(required=False, choices=['enable', 'disable'], default='disable'),
             state=dict(choices=['present', 'absent'], default='present'),
             port=dict(default=830, type='int'),
             hostname=dict(required=True),
@@ -155,11 +154,10 @@ def main():
     device = COM7(**device_args)
     source = module.params['source']
     soap = module.params['soap']
-    ssh = module.params['ssh']
     operation = module.params['operation']
     opera_type = module.params['opera_type']
     state = module.params['state']
-    args = dict(source=source, operation=operation, opera_type=opera_type, soap=soap, ssh=ssh)
+    args = dict(source=source, operation=operation, opera_type=opera_type, soap=soap)
     proposed = dict((k, v) for k, v in args.items() if v is not None)
 
     changed = False
@@ -172,7 +170,7 @@ def main():
                   descr='error connecting to device')
 
     try:
-        netConf = Netconf(device, source, operation, opera_type, soap, ssh)
+        netConf = Netconf(device, source, operation, opera_type, soap)
     except PYCW7Error as e:
         safe_fail(module, device, msg=str(e))
 

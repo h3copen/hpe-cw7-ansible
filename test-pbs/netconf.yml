@@ -16,4 +16,4 @@
       # detele netconf config    
       - comware_netconf: source=all operation=protocol-operation opera_type=action username={{ username }} password={{ password }} hostname={{ inventory_hostname }} state=absent
     
-      - comware_netconf: soap=http ssh=enable username={{ username }} password={{ password }} hostname={{ inventory_hostname }}
+      - comware_netconf: soap=http username={{ username }} password={{ password }} hostname={{ inventory_hostname }}
