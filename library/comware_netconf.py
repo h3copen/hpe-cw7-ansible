@@ -98,7 +98,7 @@ EXAMPLES = """
       hostname: "{{ inventory_hostname }}"
       state: absent
 
-comware_netconf: soap=http ssh=enable username={{ username }} password={{ password }} hostname={{ inventory_hostname }}
+comware_netconf: soap=http username={{ username }} password={{ password }} hostname={{ inventory_hostname }}
 """
 
 import socket
