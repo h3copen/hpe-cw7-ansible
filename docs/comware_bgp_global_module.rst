@@ -163,7 +163,7 @@ Examples
     
         
     # bgp global views configs
-    -  comware_bgp_global: autonomous_system=10 bgp_instance=test router_id=192.168.1.185 advertise_rib_active=true timer_connect_retry=100 timer_keepalive=100 timer_hold=301 \
+    -  comware_bgp_global: bgp_as=10 bgp_instance=test router_id=192.168.1.185 advertise_rib_active=true timer_connect_retry=100 timer_keepalive=100 timer_hold=301 \
        compare_as_med=true peer_ip=1.1.1.3 peer_as_num=10 peer_ignore=true username={{ username }} password={{ password }} hostname={{ inventory_hostname }}
     
 
