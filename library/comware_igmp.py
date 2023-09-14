@@ -236,29 +236,34 @@ def main():
             module.fail_json(msg='The \'name\' parameter must be set.'
                                  '\nPlease configure type first by itself,'
                                  '\nthen run again.')
-    igmp=Igmp(device,name)
-    if state == 'present':
-        if is_routed:
-            if igstate == 'enabled':
-                args = dict(igstate = str(module.params.get('igstate')),version=str(module.params.get('version')))
-                igmp.build_igmp(stage = True, **args)
-            if mode:
-                args = dict(mode = str(module.params.get('mode')))
-                igmp.config_pim_mode(stage =True, **args)
-        else:
-            raise InterfaceAbsentError(name)
+    igmp=Igmp(device, name)
+    # config igmp snooping
+    if name == '':
         if snstate == 'enable':
             igmp.build_igmp_snooping(stage = True, snstate=snstate)
-    elif state == 'absent':
-        if is_routed:
-            if igstate == 'disabled':
-                igmp.remove_igmp(stage = True)
-            if mode:
-                igmp.remove_pim_mode(stage =True)
-        else:
-            raise InterfaceAbsentError(name)
         if snstate == 'disable':
             igmp.build_igmp_snooping(stage = True, snstate=snstate)
+    else:
+        if state == 'present':
+            if is_routed:
+                if igstate == 'enabled':
+                    args = dict(igstate = str(module.params.get('igstate')),version=str(module.params.get('version')))
+                    igmp.build_igmp(stage = True, **args)
+                if mode:
+                    args = dict(mode = str(module.params.get('mode')))
+                    igmp.config_pim_mode(stage =True, **args)
+            else:
+                raise InterfaceAbsentError(name)
+            
+        elif state == 'absent':
+            if is_routed:
+                if igstate == 'disabled':
+                    igmp.remove_igmp(stage = True)
+                if mode:
+                    igmp.remove_pim_mode(stage =True)
+            else:
+                raise InterfaceAbsentError(name)
+        
 
     existing = True
     commands = None
