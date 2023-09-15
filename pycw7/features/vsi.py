@@ -58,7 +58,7 @@ class Vsi(object):
             True if stage=True and successfully staged
             CLI response strings if immediate execution
         """
-        return self._build_config(state='default', stage=stage, **kvargs)
+        return self._build_config(state='absent', stage=stage, **kvargs)
 
     def _build_config(self, state, stage=False, **kvargs):
         """Build CLI commands to configure/create VXLAN tunnel interfaces
@@ -78,7 +78,7 @@ class Vsi(object):
             CLI response strings if immediate execution
         """
         commands = []
-        if state == 'default':
+        if state == 'absent':
             commands.append(('undo vsi {0}').format(kvargs.get('vsi')))
         elif state == 'present':
             CMDS = {

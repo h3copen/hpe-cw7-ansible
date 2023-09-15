@@ -144,7 +144,7 @@ def main():
             macaddr=dict(type='str'),
             local_proxy=dict(choices=['nd', 'arp']),
             distribute_gateway=dict(choices=['local']),
-            state=dict(choices=['present', 'default'], default='present'),
+            state=dict(choices=['present', 'absent'], default='present'),
             port=dict(default=830, type='int'),
             hostname=dict(required=True),
             username=dict(required=True),
@@ -221,8 +221,8 @@ def main():
         if delta:
             interface.build(stage=True,**delta)
 
-    elif state == 'default':
-        delta = dict(vsi=vsi)
+    elif state == 'absent':
+        delta = dict(vsi=vsi_intf)
         if delta:
             interface.remove(stage=True,**delta)
 

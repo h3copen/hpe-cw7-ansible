@@ -12,7 +12,7 @@ category: Feature (RW)
 notes:
     - l2vpn needs to enbled before config vsi view.
     - If you want to use vsi gateway interface, it must be exist , you can use interface module to create it.
-    - when giving vsi and state is default , it will delete the given vsi config all.
+    - when giving vsi and state is absent , it will delete the given vsi config all.
 options:
     vsi:
         description:
@@ -121,7 +121,7 @@ EXAMPLES = """
        encap=true rd=auto vpn_target_auto=both username={{ username }} password={{ password }} hostname={{ inventory_hostname }}
        
      # - name:  delelte vsi configs
-       # comware_vsi: vsi=vpna state=default username={{ username }} password={{ password }} hostname={{ inventory_hostname }}
+       # comware_vsi: vsi=vpna state=absent username={{ username }} password={{ password }} hostname={{ inventory_hostname }}
 
 """
 
@@ -171,7 +171,7 @@ def main():
             encap=dict(choices=['true', 'false']),
             rd=dict(type='str'),
             vpn_target_auto=dict(choices=['both', 'export','import']),
-            state=dict(choices=['present', 'default'], default='present'),
+            state=dict(choices=['present', 'absent'], default='present'),
             port=dict(default=830, type='int'),
             hostname=dict(required=True),
             username=dict(required=True),
@@ -265,7 +265,7 @@ def main():
         if delta:
             VSI.build(stage=True,**delta)
 
-    elif state == 'default':
+    elif state == 'absent':
         delta = dict(vsi=vsi)
         if delta:
             VSI.remove(stage=True,**delta)
