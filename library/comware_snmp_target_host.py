@@ -94,28 +94,22 @@ options:
 
 EXAMPLE = """
 - name: Config SNMP v3 TagetHost
-  comware_snmp_target_host:
-    state=absent target_type=trap server_address=10.1.1.1 usm_user_name=Uv3
-    sercurity_model=v3 security_level=authentication vpnname=testvpn
-    username={{ username }} password={{ password }} hostname={{ inventory_hostname }}
-          
-- name: Undo SNMP v3 TagetHost
-  comware_snmp_target_host:
-    state=absent target_type=trap server_address=10.1.1.1 usm_user_name=Uv3
-    vpnname=testvpn
-    username={{ username }} password={{ password }} hostname={{ inventory_hostname }}
+        comware_snmp_target_host: state=present target_type=trap server_address=10.1.1.1 usm_user_name=Uv3 sercurity_model=v3 security_level=authentication vpnname=testvpn username={{ username }} password={{ password }} hostname={{ inventory_hostname }}
 
-- name: Config SNMP TagetHost
-  comware_snmp_target_host:
-    state=present target_type=trap server_address=100.1.1.1 usm_user_name=testuv2c 
-    sercurity_model=v2c
-    username={{ username }} password={{ password }} hostname={{ inventory_hostname }}
-          
-- name: Undo SNMP TagetHost
-  comware_snmp_target_host:
-    state=present target_type=trap server_address=100.1.1.1 usm_user_name=testuv2c 
-    sercurity_model=v2c vpnname=testvpn
-    username={{ username }} password={{ password }} hostname={{ inventory_hostname }}
+      - name: Undo SNMP v3 TagetHost
+        comware_snmp_target_host: state=absent target_type=trap server_address=10.1.1.1 usm_user_name=Uv3 vpnname=testvpn username={{ username }} password={{ password }} hostname={{ inventory_hostname }}
+
+      - name: Config SNMP v2c TagetHost
+        comware_snmp_target_host: state=present target_type=trap server_address=100.1.1.1 usm_user_name=testuv2c sercurity_model=v2c username={{ username }} password={{ password }} hostname={{ inventory_hostname }}
+
+      - name: Undo SNMP v2c TagetHost
+        comware_snmp_target_host: state=absent target_type=trap server_address=100.1.1.1 usm_user_name=testuv2c sercurity_model=v2c vpnname=testvpn username={{ username }} password={{ password }} hostname={{ inventory_hostname }}
+
+      - name: Config SNMP TagetHost
+        comware_snmp_target_host: state=present target_type=inform server_address=100.1.1.1 usm_user_name=testuv2c sercurity_model=v2c username={{ username }} password={{ password }} hostname={{ inventory_hostname }}
+
+      - name: Undo SNMP TagetHost
+        comware_snmp_target_host: state=absent target_type=inform server_address=100.1.1.1 usm_user_name=testuv2c sercurity_model=v2c vpnname=testvpn username={{ username }} password={{ password }} hostname={{ inventory_hostname }}
 """
 
 import socket
