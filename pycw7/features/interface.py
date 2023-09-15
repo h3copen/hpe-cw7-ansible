@@ -260,26 +260,17 @@ class Interface(object):
         defaults = {}
         defaults['description'] = self.interface_name + ' Interface'
         defaults['admin'] = 'up'
-        if self.is_ethernet:
-            defaults['speed'] = 'auto'
-            defaults['duplex'] = 'auto'
-            defaults['type'] = 'bridged'
-        if self.is_routed and res_eth != None:
-            defaults['speed'] = 'auto'
-            defaults['duplex'] = 'auto'
-            defaults['type'] = 'routed'
-        elif self.iface_type == 'Bridge-Aggregation':
-            pass
-        elif self.iface_type == 'Vlan-interface':
-            pass
-        elif self.iface_type == 'LoopBack':
-            pass
-        elif self.iface_type == 'Route-Aggregation':
-            pass
-        elif self.iface_type == 'Tunnel':
-            pass
-        else:
-            defaults['type'] = 'routed'
+        if not self.is_logical_iface():
+            if self.is_ethernet:
+                defaults['speed'] = 'auto'
+                defaults['duplex'] = 'auto'
+                defaults['type'] = 'bridged'
+            elif self.is_routed and res_eth != None:
+                defaults['speed'] = 'auto'
+                defaults['duplex'] = 'auto'
+                defaults['type'] = 'routed'
+            else:
+                defaults['type'] = 'routed'
         return defaults
 
     def param_check(self, **params):
@@ -467,6 +458,25 @@ class Interface(object):
             return self.device.stage_config(top, 'action')
         else:
             return self.device.action(top)
+
+    def is_logical_iface(self):
+        """ if port a logic port
+        Args:
+            None
+
+        Returns:
+            True if logic port
+        """
+        logic_type_map = {'LoopBack': '16',
+                          'Vlan-interface': '41',
+                          'Bridge-Aggregation': '56',
+                          'Route-Aggregation': '67',
+                          'Vsi-interface': '111'}
+
+        if self.iface_type in logic_type_map:
+            return True
+        
+        return False
 
     def build(self, stage=False, **params):
         """Stage or execute the configuration to

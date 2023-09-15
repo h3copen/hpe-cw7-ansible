@@ -257,7 +257,13 @@ def main():
             interface.default(stage=True)
     elif state == 'absent':
         if interface.iface_exists:
-            if interface.is_ethernet:
+            if interface.is_logical_iface():
+                try:
+                    interface.remove_logical(stage=True)
+                except InterfaceError as e:
+                    safe_fail(module, device, msg=str(e),
+                            descr='Error removing logical interface.')
+            elif interface.is_ethernet:
                 defaults = interface.get_default_config()
                 delta = dict(set(existing.items()).difference(
                     defaults.items()))
@@ -273,12 +279,6 @@ def main():
                 except InterfaceError as e:
                     safe_fail(module, device, msg=str(e),
                             descr='Error removing routing sub interface.')
-            else:
-                try:
-                    interface.remove_logical(stage=True)
-                except InterfaceError as e:
-                    safe_fail(module, device, msg=str(e),
-                            descr='Error removing logical interface.')
 
     commands = None
     end_state = existing
