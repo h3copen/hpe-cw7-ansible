@@ -5,9 +5,9 @@ DOCUMENTATION = '''
 ---
 
 module: comware_patch
-short_description: Rollback the running configuration
+short_description: Manage patch
 description:
-    - Rollback theconfiguration to the file
+    - Manage patch
 version_added: 1.8
 category: System (RW)
 author: wangliang

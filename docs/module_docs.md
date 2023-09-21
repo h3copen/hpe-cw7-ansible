@@ -65,7 +65,7 @@
   * [comware_ntp - Configure the ntp issue to be applied to the device](#comware_ntp)
   * [comware_ospf - Manage ospf](#comware_ospf)
   * [comware_ospf_intf - Manage ospf in interface](#comware_ospf_intf)
-  * [comware_patch - Rollback the running configuration](#comware_patch)
+  * [comware_patch - Manage patch](#comware_patch)
   * [comware_radius - create radius scheme](#comware_radius)
   * [comware_rollback - Rollback the running configuration](#comware_rollback)
   * [comware_sflow - Manage sflow attributes for Comware 7 devices](#comware_sflow)
@@ -2318,14 +2318,14 @@ Manage ospf in interface
 ```
 	
 ## comware_patch
-Rollback the running configuration
+Manage patch
 
   * Synopsis
   * Options
   * Examples
 
 #### Synopsis
-Rollback the running configuration
+Manage patch
 
 #### Options
 

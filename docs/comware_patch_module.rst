@@ -14,7 +14,7 @@ Synopsis
 
 Added in version 1.8
 
-Rollback theconfiguration to the file
+Manage patch
 
 Options
 -------
