@@ -65,15 +65,15 @@ options:
 EXAMPLES = """
 
   # telemetry Flow Group aging time config
-  - comware_teteFlowGroup_global:
-      agtime:20
+  - comware_teleFlowGroup_global:
+      agtime: 20
       username: "{{ username }}"
       password: "{{ password }}"
       hostname: "{{ inventory_hostname }}"
 
  # config aging time into default state      
-- comware_teteFlowGroup_global:
-      agtime:20
+- comware_teleFlowGroup_global:
+      agtime: 20
       username: "{{ username }}"
       password: "{{ password }}"
       hostname: "{{ inventory_hostname }}"
