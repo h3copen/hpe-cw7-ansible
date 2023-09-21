@@ -116,21 +116,20 @@ options:
         aliases: []
 """
 EXAMPLE = """
-
-# deploy advanced ACL (IPv4 advanced ACL 3000 to 3999)
-- comware_acl: aclid=3010  groupcg=advanced appdirec=inbound username={{ username }} password={{ password }} hostname={{ inventory_hostname }}
-# deploy basic ACL (IPv4 basic ACL 2000 to 2999)
-- comware_acl: aclid=2010  groupcg=advanced appdirec=inbound username={{ username }} password={{ password }} hostname={{ inventory_hostname }}
-# delete advanced ACL
-- comware_acl: aclid=3010 groupcg=advanced state=absent username={{ username }} password={{ password }} hostname={{ inventory_hostname }}
-# create rule
-- comware_acl: aclid=3010 groupcg=advanced ruleid=0 action=deny scripaddr=10.1.1.1 username={{ username }} password={{ password }} hostname={{ inventory_hostname }}
-# apply ACL to interface
-- comware_acl: aclid=3010 groupcg=advanced name=hun1/2/2 appdirec=inbound username={{ username }} password={{ password }} hostname={{ inventory_hostname }}
-# delete rule
-- comware_acl: aclid=3010 ruleid=0 state=absent username={{ username }} password={{ password }} hostname={{ inventory_hostname }}
-#delete interface ACL application
-- comware_acl: aclid=3010 name=hun1/2/2 appdirec=inbound state=absent username={{ username }} password={{ password }} hostname={{ inventory_hostname }}
+    # deploy advanced ACL (IPv4 advanced ACL 3000 to 3999)
+    - comware_acl: aclid=3010  groupcg=advanced username={{ username }} password={{ password }} hostname={{ inventory_hostname }}
+    # deploy basic ACL (IPv4 basic ACL 2000 to 2999)
+    - comware_acl: aclid=2010  groupcg=basic username={{ username }} password={{ password }} hostname={{ inventory_hostname }}
+    # delete advanced ACL
+    - comware_acl: aclid=3010 groupcg=advanced state=absent username={{ username }} password={{ password }} hostname={{ inventory_hostname }}
+    # create rule
+    - comware_acl: aclid=3010 groupcg=advanced ruleid=0 action=deny scripaddr=10.1.1.1 username={{ username }} password={{ password }} hostname={{ inventory_hostname }}
+    # apply ACL to interface
+    - comware_acl: aclid=3010 groupcg=advanced name=GigabitEthernet1/0/3 appdirec=inbound username={{ username }} password={{ password }} hostname={{ inventory_hostname }}
+    # delete rule
+    - comware_acl: aclid=3010 ruleid=0 state=absent username={{ username }} password={{ password }} hostname={{ inventory_hostname }}
+    #delete interface ACL application
+    - comware_acl: aclid=3010 name=GigabitEthernet1/0/3 appdirec=inbound state=absent username={{ username }} password={{ password }} hostname={{ inventory_hostname }}
 """
 
 import socket
